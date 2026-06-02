@@ -1,0 +1,111 @@
+// import React from 'react';
+import { Box, Container, Grid, Typography, Link, Divider } from '@mui/material';
+
+// Asset Imports
+import FbIcon from '../../assets/fb-icon.png';
+import InstaIcon from '../../assets/insta-icon.png';
+import XIcon from '../../assets/x-icon.png';
+import LogoAsset from '../../assets/Logo.png'; 
+
+const footerLinks = [
+  {
+    title: 'Shop',
+    links: ['Paintings', 'Sculptures', 'Photography', 'Digital Art']
+  },
+  {
+    title: 'Support',
+    links: ['Help Center', 'Shipping Info', 'Returns', 'Contact Us']
+  },
+  {
+    title: 'Company',
+    links: ['About Us', 'Careers', 'Press', 'Blog']
+  },
+  {
+    title: 'Legal',
+    links: ['Privacy Policy', 'Terms of Service']
+  }
+];
+
+const HomeFooter = () => {
+  const socialIconStyle = {
+    width: 25,
+    height: 25,
+    cursor: 'pointer',
+    objectFit: 'contain'
+  };
+
+  return (
+    <Box sx={{ backgroundColor: '#F9FAFB', pt: { xs: 6, md: 8 }, pb: 4, width: '100%', borderTop: '1px solid #E0E0E0' }}>
+      <Container maxWidth="xl">
+        
+        <Grid container spacing={14} sx={{ mb: 6 }}>
+          
+          {/* Left Column Profile Branding Info Column */}
+          <Grid item xs={12} md={4} sx={{ pr: { md: 6 } }}>
+            {/* Embedded PureFrame Text Header Row approximation */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+               <img src={LogoAsset} alt="PureFrame Logo" style={{ width: '10%', height: '10%', objectFit: 'contain' }} />
+              <Typography variant="body1" fontWeight={700} color="text.primary">
+                PureFrame
+              </Typography>
+            </Box>
+            
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6, maxWidth: 320, textAlign:'left'}}>
+              Capturing eternal moments with passion and creativity. Your trusted partner for wedding and candid photography in Coimbatore.
+            </Typography>
+
+            {/* Target Social Links Block Grid Row */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5}}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'black', borderRadius:'5px' }}>
+                <img src={FbIcon} alt="Facebook Portal Trigger" style={socialIconStyle} />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'black', borderRadius:'5px'}}>
+                <img src={InstaIcon} alt="Instagram Portal Trigger" style={socialIconStyle} />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'black', borderRadius:'5px' }}>
+                <img src={XIcon} alt="X Twitter Portal Trigger" style={socialIconStyle} />
+              </Box>
+            </Box>
+          </Grid>
+
+          {/* Right Columns: Nested Sub-Navigation Link Column Lists */}
+          <Grid item xs={12} md={10}>
+            <Grid container spacing={{ xs: 10, sm: 12 }}>
+              {footerLinks.map((col) => (
+                <Grid item xs={8} sm={4} key={col.title}>
+                  <Typography variant="body2" fontWeight={600} color="text.primary" sx={{ mb: 2.5, letterSpacing: '0.10em' }}>
+                    {col.title}
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                    {col.links.map((item) => (
+                      <Link 
+                        key={item} 
+                        href="#" 
+                        underline="none" 
+                        color="text.secondary" 
+                        sx={{ fontSize: '0.85rem', '&:hover': { color: 'text.primary' } }}
+                      >
+                        {item}
+                      </Link>
+                    ))}
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
+
+        </Grid>
+
+        <Divider sx={{ borderColor: '#E5E7EB', mb: 3 }} />
+
+        {/* Center-Aligned Copyright Notice Row */}
+        <Typography variant="caption" color="text.secondary" align="center" sx={{ display: 'block', fontSize: '0.75rem', letterSpacing: '0.01em' }}>
+          © 2024 PureFrame. All rights reserved.
+        </Typography>
+
+      </Container>
+    </Box>
+  );
+};
+
+export default HomeFooter;
