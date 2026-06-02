@@ -2,10 +2,10 @@
 import { Box, Grid, Typography, Container, Link } from '@mui/material';
 
 // Asset Imports
-import Shop1 from '../../assets/shop1.png';
-import Shop2 from '../../assets/shop2.png';
-import Shop3 from '../../assets/shop3.png';
-import Shop4 from '../../assets/shop4.png';
+import Shop1 from '../../assets/home/shop1.png';
+import Shop2 from '../../assets/home/shop2.png';
+import Shop3 from '../../assets/home/shop3.png';
+import Shop4 from '../../assets/home/shop4.png';
 
 const categories = [
   { id: 1, img: Shop1, title: 'Paintings', sectionId: 'paintings-section' },

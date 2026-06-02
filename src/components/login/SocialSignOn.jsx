@@ -1,8 +1,8 @@
 // import React from 'react';
 import { Box, Button, Typography, Divider } from '@mui/material';
 // Adjust paths to your assets
-import GoogleIcon from '../../assets/G-icon.png';
-import FacebookIcon from '../../assets/F-icon.png';
+import GoogleIcon from '../../assets/home/G-icon.png';
+import FacebookIcon from'../../assets/home/F-icon.png';
 
 const SocialSignOn = () => {
   // Common button styles for responsiveness

@@ -5,10 +5,10 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import VisibilityMuiIcon from '@mui/icons-material/Visibility';
 
 // Asset Imports
-import Trend1 from '../../assets/trend1.png';
-import Trend2 from '../../assets/trend2.png';
-import Trend3 from '../../assets/trend3.png';
-import Trend4 from '../../assets/trend4.png';
+import Trend1 from '../../assets/home/trend1.png';
+import Trend2 from '../../assets/home/trend2.png';
+import Trend3 from '../../assets/home/trend3.png';
+import Trend4 from '../../assets/home/trend4.png';
 
 const trendingProducts = [
   { id: 1, img: Trend1, title: 'Ocean Waves', artist: 'Thomas Miller', specs: 'Oil on canvas, 2023', rating: 4.9, price: 450 },

@@ -2,10 +2,10 @@
 import { Box, Container, Grid, Typography, Link, Divider } from '@mui/material';
 
 // Asset Imports
-import FbIcon from '../../assets/fb-icon.png';
-import InstaIcon from '../../assets/insta-icon.png';
-import XIcon from '../../assets/x-icon.png';
-import LogoAsset from '../../assets/Logo.png'; 
+import FbIcon from '../../assets/product/fb-icon.png';
+import InstaIcon from '../../assets/product/insta-icon.png';
+import XIcon from '../../assets/home/x-icon.png';
+import LogoAsset from '../../assets/home/Logo.png'; 
 
 const footerLinks = [
   {

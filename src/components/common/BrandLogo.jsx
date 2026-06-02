@@ -1,7 +1,7 @@
 // import React from 'react';
 import { Box, Typography} from '@mui/material';
 // Adjust path to your asset
-import LogoAsset from '../../assets/Logo.png'; 
+import LogoAsset from '../../assets/home/Logo.png'; 
 
 const BrandLogo = ({ textColor = 'text.primary', size = 'medium', withText = true }) => {
   const isLarge = size === 'large';

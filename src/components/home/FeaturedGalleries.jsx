@@ -2,10 +2,10 @@
 import { Box, Container, Grid, Typography, Link } from '@mui/material';
 
 // Asset Imports
-import Gallery1 from '../../assets/gallery1.png';
-import Gallery2 from '../../assets/gallery2.png';
-import Gallery3 from '../../assets/gallery3.png';
-import Gallery4 from '../../assets/gallery4.png';
+import Gallery1 from '../../assets/home/gallery1.png';
+import Gallery2 from '../../assets/home/gallery2.png';
+import Gallery3 from '../../assets/home/gallery3.png';
+import Gallery4 from '../../assets/home/gallery4.png';
 
 const galleries = [
   { id: 1, img: Gallery1 },

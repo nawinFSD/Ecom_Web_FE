@@ -3,9 +3,9 @@ import { Box, Container, Link, useTheme, useMediaQuery } from '@mui/material';
 import BrandLogo from './BrandLogo';
 
 // Asset Imports
-import SearchIconImg from '../../assets/search-icon.png';
-import TrolleyIconImg from '../../assets/trolly-icon.png';
-import PersonIconImg from '../../assets/person-icon.png';
+import SearchIconImg from '../../assets/home/search-icon.png';
+import TrolleyIconImg from '../../assets/home/trolly-icon.png';
+import PersonIconImg from '../../assets/home/person-icon.png';
 
 // Define the links and their corresponding HTML element IDs
 const navLinks = [

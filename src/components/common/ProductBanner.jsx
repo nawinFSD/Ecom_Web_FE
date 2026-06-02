@@ -2,9 +2,9 @@
 import { Box, Container, Typography, Button, IconButton } from '@mui/material';
 
 // Asset Imports
-import ProductBannerImg from '../../assets/product-banner.png';
-import LeftArrowImg from '../../assets/left-arrow.png';
-import RightArrowImg from '../../assets/right-arrow.png';
+import ProductBannerImg from '../../assets/product/product-banner.jpg';
+import LeftArrowImg from '../../assets/home/left-arrow.png';
+import RightArrowImg from '../../assets/home/right-arrow.png';
 
 const ProductBanner = () => {
   const arrowStyle = {
@@ -39,13 +39,13 @@ const ProductBanner = () => {
 
         {/* Center Content */}
         <Box sx={{ textAlign: 'center', maxWidth: 600, mx: 'auto', px: 2 }}  id='artists-section'>
-          <Typography variant="caption" sx={{ color: '#757575', fontWeight: 600, letterSpacing: '0.05em', display: 'block', mb: 1.5 }}>
+          <Typography variant="caption" sx={{ color: '#f3eded', fontWeight: 600, letterSpacing: '0.05em', display: 'block', mb: 1.5 }}>
             September 12-22
           </Typography>
           <Typography variant="h3" component="h1" sx={{ fontFamily: 'serif', fontWeight: 600, mb: 2, fontSize: { xs: '2rem', sm: '2.75rem', md: '3.25rem' }, color: '#1A1A1A' }}>
             Enjoy free home delivery in this summer
           </Typography>
-          <Typography variant="body1" sx={{ color: '#666666', mb: 4, fontSize: { xs: '0.9rem', sm: '1rem' } }}>
+          <Typography variant="body1" sx={{ color: '#f3eded', mb: 4, fontSize: { xs: '0.9rem', sm: '1rem' } }}>
             Designer Dresses - Pick from trendy Designer Dress.
           </Typography>
           <Button 

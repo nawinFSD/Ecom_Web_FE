@@ -7,21 +7,21 @@ import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
 
 // Asset Imports
-import Product1 from '../../assets/product1.png';
-import Product2 from '../../assets/product2.png';
-import Product3 from '../../assets/product3.png';
-import Product4 from '../../assets/product4.png';
-import Product5 from '../../assets/product5.png';
-import Product6 from '../../assets/product6.png';
-import Product7 from '../../assets/product7.png';
-import Product8 from '../../assets/product8.png';
-import Product9 from '../../assets/product9.png';
-import Product10 from '../../assets/product10.png';
-import Product11 from '../../assets/product11.png';
-import Product12 from '../../assets/product12.png';
+import Product1 from '../../assets/product/product1.png';
+import Product2 from '../../assets/product/product2.png';
+import Product3 from '../../assets/product/product3.png';
+import Product4 from '../../assets/product/product4.png';
+import Product5 from '../../assets/product/product5.png';
+import Product6 from '../../assets/product/product6.png';
+import Product7 from '../../assets/product/product7.png';
+import Product8 from '../../assets/product/product8.png';
+import Product9 from '../../assets/product/product9.png';
+import Product10 from '../../assets/product/product10.png';
+import Product11 from '../../assets/product/product11.png';
+import Product12 from '../../assets/product/product12.png';
 
-import BrightStar from '../../assets/bright-star.png';
-import BrightlessStar from '../../assets/brightless-star.png';
+import BrightStar from '../../assets/product/bright-star.png';
+import BrightlessStar from '../../assets/product/brightless-star.png';
 
 // Custom Star Rating implementation using your assets
 const ListStarRating = ({ rating }) => (

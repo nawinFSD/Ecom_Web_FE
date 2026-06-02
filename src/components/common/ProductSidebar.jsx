@@ -2,8 +2,8 @@ import React from 'react';
 import { Box, Typography, Slider, FormGroup, FormControlLabel, Checkbox, Link } from '@mui/material';
 
 // Asset Imports for Custom Rating
-import BrightStar from '../../assets/bright-star.png';
-import BrightlessStar from '../../assets/brightless-star.png';
+import BrightStar from '../../assets/product/bright-star.png';
+import BrightlessStar from '../../assets/product/brightless-star.png';
 
 // Helper component to render custom star assets
 const CustomStarRating = ({ rating }) => {

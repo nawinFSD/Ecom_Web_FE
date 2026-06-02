@@ -4,9 +4,9 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 // Asset Imports
-import Flash1 from '../../assets/flash1.png';
-import Flash2 from '../../assets/flash2.png';
-import Flash3 from '../../assets/flash3.png';
+import Flash1 from '../../assets/home/flash1.png';
+import Flash2 from '../../assets/home/flash2.png';
+import Flash3 from '../../assets/home/flash3.png';
 
 const products = [
   { id: 1, img: Flash1, title: 'Abstract Canvas', artist: 'Maria Santos', rating: 4.8, currentPrice: 299, originalPrice: 399 },

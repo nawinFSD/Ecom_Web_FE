@@ -2,9 +2,9 @@
 import { Box, Button, Typography, Container } from '@mui/material';
 
 // Asset Imports
-import HomeBannerImg from '../../assets/home-banner.jpg';
-import LeftArrowImg from '../../assets/left-arrow.png';
-import RightArrowImg from '../../assets/right-arrow.png';
+import HomeBannerImg from '../../assets/home/home-banner.jpg';
+import LeftArrowImg from '../../assets/home/left-arrow.png';
+import RightArrowImg from '../../assets/home/right-arrow.png';
 
 const HomeBanner = () => {
   const arrowStyle = {
