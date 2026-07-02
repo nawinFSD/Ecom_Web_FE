@@ -13,6 +13,7 @@
     "oldPrice": 1599,
     "badge": "SALE",
     "outOfStock": false,
+    "brand": "Gallery One",
     "category": "Paintings"
   },
   {
@@ -29,6 +30,7 @@
     "oldPrice": null,
     "badge": "NEW",
     "outOfStock": false,
+    "brand": "Modern Arts",
     "category": "Paintings"
   },
   {
@@ -45,6 +47,7 @@
     "oldPrice": 1350,
     "badge": "SALE",
     "outOfStock": true,
+    "brand": "Art House",
     "category": "Paintings"
   },
   {
@@ -61,6 +64,7 @@
     "oldPrice": null,
     "badge": null,
     "outOfStock": false,
+    "brand": "Classic Studio",
     "category": "Paintings"
   },
   {
@@ -77,6 +81,7 @@
     "oldPrice": 1480,
     "badge": "SALE",
     "outOfStock": false,
+    "brand": "Gallery One",
     "category": "Digital Art"
   },
   {
@@ -93,6 +98,7 @@
     "oldPrice": null,
     "badge": null,
     "outOfStock": false,
+    "brand": "Modern Arts",
     "category": "Paintings"
   },
   {
@@ -109,6 +115,7 @@
     "oldPrice": 1450,
     "badge": "SALE",
     "outOfStock": false,
+    "brand": "Art House",
     "category": "Photography"
   },
   {
@@ -125,6 +132,7 @@
     "oldPrice": null,
     "badge": "NEW",
     "outOfStock": false,
+    "brand": "Classic Studio",
     "category": "Paintings"
   },
   {
@@ -141,6 +149,7 @@
     "oldPrice": 1380,
     "badge": "SALE",
     "outOfStock": true,
+    "brand": "Gallery One",
     "category": "Paintings"
   },
   {
@@ -157,6 +166,7 @@
     "oldPrice": null,
     "badge": null,
     "outOfStock": false,
+    "brand": "Modern Arts",
     "category": "Digital Art"
   },
   {
@@ -173,6 +183,7 @@
     "oldPrice": 1420,
     "badge": "SALE",
     "outOfStock": false,
+    "brand": "Art House",
     "category": "Paintings"
   },
   {
@@ -189,6 +200,160 @@
     "oldPrice": null,
     "badge": null,
     "outOfStock": false,
+    "brand": "Classic Studio",
     "category": "Sculptures"
+  },
+  {
+    "id": 13,
+    "imageKey": "new1",
+    "title": "Golden Reflections",
+    "artist": "Maria Santos",
+    "description": "A captivating interplay of shimmering light and rich golden metallic textures. This painting brings a warm, opulent presence to any modern gallery, reflecting a deep exploration of shape and metallic color overlay.",
+    "medium": "Mixed Media with Gold Leaf",
+    "dimensions": "24\" × 24\" (61 × 61 cm)",
+    "year": 2024,
+    "rating": 4.7,
+    "price": 1350,
+    "oldPrice": 1450,
+    "badge": "SALE",
+    "outOfStock": false,
+    "brand": "Gallery One",
+    "category": "Paintings"
+  },
+  {
+    "id": 14,
+    "imageKey": "new2",
+    "title": "Shadowed Path",
+    "artist": "David Chen",
+    "description": "A striking monochromatic composition highlighting the quiet contrast of forest shadows and filtered morning light. The stark, bold brush strokes evoke a deep sense of journey, mystery, and natural structure.",
+    "medium": "Ink wash on Paper",
+    "dimensions": "20\" × 30\" (51 × 76 cm)",
+    "year": 2023,
+    "rating": 4.5,
+    "price": 1420,
+    "oldPrice": null,
+    "badge": "NEW",
+    "outOfStock": false,
+    "brand": "Modern Arts",
+    "category": "Paintings"
+  },
+  {
+    "id": 15,
+    "imageKey": "new3",
+    "title": "Azure Sea",
+    "artist": "Elena Rodriguez",
+    "description": "A dynamic depiction of open water currents and deep sea foam. The cool tones and vibrant turquoise palettes combine beautifully to invite an atmosphere of oceanic calm, movement, and coastal wonder.",
+    "medium": "Acrylic on Linen",
+    "dimensions": "36\" × 36\" (91 × 91 cm)",
+    "year": 2023,
+    "rating": 4.8,
+    "price": 1290,
+    "oldPrice": null,
+    "badge": null,
+    "outOfStock": false,
+    "brand": "Art House",
+    "category": "Paintings"
+  },
+  {
+    "id": 16,
+    "imageKey": "new4",
+    "title": "Sunset Dunes",
+    "artist": "Thomas Miller",
+    "description": "Warm, undulating lines of desert sand dunes bathed in a rich, setting sun glow. The texture captures the perpetual wind-carved designs of the desert, filling any room with serene, earthy warmth.",
+    "medium": "Oil on Canvas",
+    "dimensions": "28\" × 40\" (71 × 102 cm)",
+    "year": 2024,
+    "rating": 4.6,
+    "price": 1510,
+    "oldPrice": 1650,
+    "badge": "SALE",
+    "outOfStock": false,
+    "brand": "Classic Studio",
+    "category": "Paintings"
+  },
+  {
+    "id": 17,
+    "imageKey": "new5",
+    "title": "Crimson Forest",
+    "artist": "Sarah Johnson",
+    "description": "A vivid expressionist woodland scene filled with intense reds, oranges, and deep shadows. Inspired by late autumn walks, the impasto details bring the dense, active energy of changing seasons to life.",
+    "medium": "Acrylic on Canvas (Impasto)",
+    "dimensions": "24\" × 32\" (61 × 81 cm)",
+    "year": 2023,
+    "rating": 4.4,
+    "price": 1390,
+    "oldPrice": null,
+    "badge": null,
+    "outOfStock": false,
+    "brand": "Gallery One",
+    "category": "Paintings"
+  },
+  {
+    "id": 18,
+    "imageKey": "new6",
+    "title": "Metropolitan Nights",
+    "artist": "Michael Brown",
+    "description": "An electric cityscape study portraying neon lights reflecting off rainy streets. The blurred street silhouettes and bright focal reflections create a modern noir narrative full of movement.",
+    "medium": "Mixed Media on Board",
+    "dimensions": "30\" × 30\" (76 × 76 cm)",
+    "year": 2024,
+    "rating": 4.9,
+    "price": 1460,
+    "oldPrice": 1599,
+    "badge": "SALE",
+    "outOfStock": false,
+    "brand": "Modern Arts",
+    "category": "Paintings"
+  },
+  {
+    "id": 19,
+    "imageKey": "new7",
+    "title": "Morning Mist",
+    "artist": "Lisa Wang",
+    "description": "A soft, delicate landscape representing early morning valley fog rising between ancient mountains. The pastel layering creates a quiet, dreamlike depth that celebrates peaceful silence.",
+    "medium": "Pastel on Cotton Paper",
+    "dimensions": "18\" × 24\" (46 × 61 cm)",
+    "year": 2023,
+    "rating": 4.7,
+    "price": 1320,
+    "oldPrice": null,
+    "badge": "NEW",
+    "outOfStock": false,
+    "brand": "Art House",
+    "category": "Paintings"
+  },
+  {
+    "id": 20,
+    "imageKey": "new8",
+    "title": "Silent Peak",
+    "artist": "Robert Davis",
+    "description": "A monumental study of a solitary mountain summit at sunrise. The sharp angles and textured rock faces contrast with the soft pastel sky, creating a sublime meditation on endurance and scale.",
+    "medium": "Oil on Canvas",
+    "dimensions": "36\" × 48\" (91 × 122 cm)",
+    "year": 2024,
+    "rating": 4.8,
+    "price": 1480,
+    "oldPrice": null,
+    "badge": null,
+    "outOfStock": false,
+    "brand": "Classic Studio",
+    "category": "Paintings"
+  },
+  {
+    "id": 21,
+    "imageKey": "new9",
+    "title": "Summer Bloom",
+    "artist": "Emma Wilson",
+    "description": "A colorful, chaotic garden array radiating pure summer joy. Meticulous floral detailing and bright natural pigments create an energetic focal point representing seasonal abundance.",
+    "medium": "Acrylic on Linen",
+    "dimensions": "24\" × 30\" (61 × 76 cm)",
+    "year": 2024,
+    "rating": 4.6,
+    "price": 1310,
+    "oldPrice": 1390,
+    "badge": "SALE",
+    "outOfStock": false,
+    "brand": "Gallery One",
+    "category": "Paintings"
   }
 ]

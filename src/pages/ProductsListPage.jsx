@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Box, Container, Typography, Link as MuiLink } from '@mui/material';
 
 // Shared Components (Unmodified)
@@ -13,6 +14,29 @@ import FloatingActions from '../components/common/FloatingActions';
 import ProductListView from '../components/products/ProductListView';
 
 const ProductsListPage = () => {
+  const [filters, setFilters] = useState({
+    priceRange: [0, 2000],
+    brands: [],
+    ratings: [],
+    availability: []
+  });
+
+  const handleFilterChange = (category, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [category]: value
+    }));
+  };
+
+  const handleClearAll = () => {
+    setFilters({
+      priceRange: [0, 2000],
+      brands: [],
+      ratings: [],
+      availability: []
+    });
+  };
+
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#FFFFFF' }}>
       
@@ -52,7 +76,7 @@ const ProductsListPage = () => {
                 flexShrink: 0 
               }}
             >
-              <ProductSidebar />
+              <ProductSidebar filters={filters} onFilterChange={handleFilterChange} onClearAll={handleClearAll} />
             </Box>
             
             {/* Right Box: Fluid Width Product List */}
@@ -63,7 +87,7 @@ const ProductsListPage = () => {
                 width: '100%' 
               }}
             >
-              <ProductListView />
+              <ProductListView filters={filters} />
             </Box>
 
           </Box>

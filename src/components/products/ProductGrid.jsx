@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { Box, Grid, Typography, Button, Select, MenuItem, Pagination, PaginationItem } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -27,6 +28,17 @@ import Product10 from '../../assets/product/product10.png';
 import Product11 from '../../assets/product/product11.png';
 import Product12 from '../../assets/product/product12.png';
 
+// New image imports
+import New1 from '../../assets/product/new1.jpg';
+import New2 from '../../assets/product/new2.jpg';
+import New3 from '../../assets/product/new3.jpg';
+import New4 from '../../assets/product/new4.jpg';
+import New5 from '../../assets/product/new5.jpg';
+import New6 from '../../assets/product/new6.jpg';
+import New7 from '../../assets/product/new7.jpg';
+import New8 from '../../assets/product/new8.jpg';
+import New9 from '../../assets/product/new9.jpg';
+
 import BrightStar from '../../assets/product/bright-star.png';
 import BrightlessStar from '../../assets/product/brightless-star.png';
 
@@ -35,6 +47,9 @@ const imageMap = {
   product4: Product4, product5: Product5, product6: Product6,
   product7: Product7, product8: Product8, product9: Product9,
   product10: Product10, product11: Product11, product12: Product12,
+  new1: New1, new2: New2, new3: New3,
+  new4: New4, new5: New5, new6: New6,
+  new7: New7, new8: New8, new9: New9,
 };
 
 // Custom Star Rating using project assets
@@ -51,9 +66,16 @@ const GridStarRating = ({ rating }) => (
   </Box>
 );
 
-const ProductGrid = () => {
+const ProductGrid = ({ 
+  filters = { priceRange: [0, 2000], brands: [], ratings: [], availability: [] } 
+}) => {
   const [viewMode, setViewMode] = useState('grid');
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [sortBy, setSortBy] = useState('Popularity');
+  const [page, setPage] = useState(1);
+
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get('search') || '';
 
   const handleProductClick = (prod) => {
     setSelectedProduct({ ...prod, img: imageMap[prod.imageKey] });
@@ -65,15 +87,72 @@ const ProductGrid = () => {
 
   const gridRef = useRef(null);
 
+  // Dynamic Filtering based on the filters prop and search query
+  const filteredProducts = productsJson.filter(prod => {
+    // Search match (title, artist, description)
+    const searchMatches = !searchQuery || 
+      prod.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prod.artist.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (prod.description && prod.description.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    // Price match
+    const priceMatches = prod.price >= filters.priceRange[0] && prod.price <= filters.priceRange[1];
+
+    // Brand match
+    const brandMatches = filters.brands.length === 0 || filters.brands.includes(prod.brand);
+
+    // Rating match
+    const ratingMatches = filters.ratings.length === 0 || filters.ratings.some(val => prod.rating >= val);
+
+    // Availability match
+    let availabilityMatches = true;
+    if (filters.availability.length > 0) {
+      availabilityMatches = filters.availability.some(status => {
+        if (status === 'In Stock') return !prod.outOfStock;
+        if (status === 'On Sale') return prod.badge === 'SALE';
+        if (status === 'New Arrivals') return prod.badge === 'NEW';
+        return false;
+      });
+    }
+
+    return searchMatches && priceMatches && brandMatches && ratingMatches && availabilityMatches;
+  });
+
+  // Dynamic Sorting based on sortBy state
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortBy === 'Price: Low to High') {
+      return a.price - b.price;
+    }
+    if (sortBy === 'Price: High to Low') {
+      return b.price - a.price;
+    }
+    // Popularity: sort by rating descending
+    return b.rating - a.rating;
+  });
+
+  // Active Pagination logic
+  const pageSize = 6;
+  const pageCount = Math.ceil(sortedProducts.length / pageSize) || 1;
+
+  useEffect(() => {
+    if (page > pageCount) {
+      setPage(1);
+    }
+  }, [pageCount, page]);
+
+  const paginatedProducts = sortedProducts.slice((page - 1) * pageSize, page * pageSize);
+
   useEffect(() => {
     if (gridRef.current) {
       const cards = gridRef.current.querySelectorAll('.grid-card-item');
-      gsap.fromTo(cards,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.6, stagger: 0.06, ease: 'power2.out' }
-      );
+      if (cards.length > 0) {
+        gsap.fromTo(cards,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.06, ease: 'power2.out' }
+        );
+      }
     }
-  }, [viewMode]);
+  }, [viewMode, page, sortBy, filters, searchQuery]);
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -82,13 +161,18 @@ const ProductGrid = () => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 3 }}>
         <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
           <Typography variant="h5" sx={{ fontFamily: 'serif', fontWeight: 500 }}>Paintings</Typography>
-          <Typography variant="body2" color="text.secondary">({productsJson.length} products)</Typography>
+          <Typography variant="body2" color="text.secondary">({sortedProducts.length} products)</Typography>
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography variant="caption" color="text.secondary">Sort by:</Typography>
-            <Select defaultValue="Popularity" size="small" sx={{ fontSize: '0.85rem', height: 32, borderRadius: 0, '& fieldset': { borderColor: '#E0E0E0' } }}>
+            <Select 
+              value={sortBy} 
+              onChange={(e) => setSortBy(e.target.value)}
+              size="small" 
+              sx={{ fontSize: '0.85rem', height: 32, borderRadius: 0, '& fieldset': { borderColor: '#E0E0E0' } }}
+            >
               <MenuItem value="Popularity">Popularity</MenuItem>
               <MenuItem value="Price: Low to High">Price: Low to High</MenuItem>
               <MenuItem value="Price: High to Low">Price: High to Low</MenuItem>
@@ -114,7 +198,7 @@ const ProductGrid = () => {
 
       {/* Product Cards */}
       <Grid container spacing={3} ref={gridRef}>
-        {productsJson.map((prod) => (
+        {paginatedProducts.map((prod) => (
           <Grid item xs={12} sm={viewMode === 'list' ? 12 : 6} md={viewMode === 'list' ? 12 : 4} key={prod.id} className="grid-card-item">
             <Box
               onClick={() => handleProductClick(prod)}
@@ -248,7 +332,9 @@ const ProductGrid = () => {
       {/* Pagination */}
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
         <Pagination
-          count={10}
+          count={pageCount}
+          page={page}
+          onChange={(e, val) => setPage(val)}
           shape="rounded"
           renderItem={(item) => (
             <PaginationItem

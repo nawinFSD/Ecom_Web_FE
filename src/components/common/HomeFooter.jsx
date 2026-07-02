@@ -1,5 +1,5 @@
-// import React from 'react';
 import { Box, Container, Grid, Typography, Link, Divider } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 
 // Asset Imports
 import FbIcon from '../../assets/product/fb-icon.png';
@@ -77,17 +77,55 @@ const HomeFooter = () => {
                     {col.title}
                   </Typography>
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                    {col.links.map((item) => (
-                      <Link 
-                        key={item} 
-                        href="#" 
-                        underline="none" 
-                        color="text.secondary" 
-                        sx={{ fontSize: '0.85rem', '&:hover': { color: 'text.primary' } }}
-                      >
-                        {item}
-                      </Link>
-                    ))}
+                    {col.links.map((item) => {
+                      const routeMap = {
+                        'Privacy Policy': '/privacy',
+                        'Terms of Service': '/terms',
+                        'Help Center': '/help-center',
+                        'Shipping Info': '/shipping-info',
+                        'Returns': '/returns',
+                        'Contact Us': '/contact-us',
+                        'About Us': '/about-us',
+                        'Careers': '/careers',
+                        'Press': '/press',
+                        'Blog': '/blog'
+                      };
+                      const isRouterLink = Object.prototype.hasOwnProperty.call(routeMap, item);
+                      const linkHref = routeMap[item] || '#';
+                      
+                      const isShopLink = col.title === 'Shop';
+                      const shopIdMap = {
+                        'Paintings': 'paintings-section',
+                        'Sculptures': 'sculpture-section',
+                        'Photography': 'photography-section',
+                        'Digital Art': 'digital-art-section'
+                      };
+                      const shopHref = isShopLink ? `/home#${shopIdMap[item]}` : linkHref;
+
+                      return (
+                        <Link 
+                          key={item} 
+                          component={(isRouterLink || isShopLink) ? RouterLink : 'a'}
+                          to={(isRouterLink || isShopLink) ? shopHref : undefined}
+                          href={(isRouterLink || isShopLink) ? undefined : '#'}
+                          onClick={(e) => {
+                            if (isShopLink) {
+                              const targetId = shopIdMap[item];
+                              const element = document.getElementById(targetId);
+                              if (element) {
+                                e.preventDefault();
+                                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                              }
+                            }
+                          }}
+                          underline="none" 
+                          color="text.secondary" 
+                          sx={{ fontSize: '0.85rem', '&:hover': { color: 'text.primary' } }}
+                        >
+                          {item}
+                        </Link>
+                      );
+                    })}
                   </Box>
                 </Grid>
               ))}

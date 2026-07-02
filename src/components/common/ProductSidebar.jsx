@@ -22,12 +22,26 @@ const CustomStarRating = ({ rating }) => {
   );
 };
 
-const ProductSidebar = () => {
-  const [priceRange, setPriceRange] = useState([0, 1000]);
+const ProductSidebar = ({
+  filters = { priceRange: [0, 2000], brands: [], ratings: [], availability: [] },
+  onFilterChange = () => {},
+  onClearAll = () => {}
+}) => {
   const sidebarRef = useRef(null);
 
   const handlePriceChange = (event, newValue) => {
-    setPriceRange(newValue);
+    onFilterChange('priceRange', newValue);
+  };
+
+  const handleCheckboxChange = (category, value, checked) => {
+    const currentList = filters[category] || [];
+    let newList;
+    if (checked) {
+      newList = [...currentList, value];
+    } else {
+      newList = currentList.filter(item => item !== value);
+    }
+    onFilterChange(category, newList);
   };
 
   useEffect(() => {
@@ -43,12 +57,17 @@ const ProductSidebar = () => {
   return (
     <Box 
       ref={sidebarRef} 
-      sx={{ backgroundColor: '#FAF8F6', p: 3, borderRadius: 1, width: '100%', height: '100%' }}
+      sx={{ backgroundColor: '#FAF8F6', p: 2, borderRadius: 1, width: '100%', height: '100%' }}
     >
       {/* Header Row */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }} id='sculpture-section'>
         <Typography variant="subtitle1" fontWeight={700}>Filters</Typography>
-        <Link href="#" underline="none" sx={{ fontSize: '0.75rem', color: '#757575', '&:hover': { color: '#000' } }}>
+        <Link 
+          href="#" 
+          underline="none" 
+          onClick={(e) => { e.preventDefault(); onClearAll(); }}
+          sx={{ fontSize: '0.75rem', color: '#757575', '&:hover': { color: '#000' } }}
+        >
           Clear All
         </Link>
       </Box>
@@ -56,10 +75,10 @@ const ProductSidebar = () => {
       {/* Price Range */}
       <Typography sx={headerStyle}>Price Range</Typography>
       <Slider
-        value={priceRange}
+        value={filters.priceRange}
         onChange={handlePriceChange}
         min={0}
-        max={1000}
+        max={2000}
         sx={{
           color: '#000000',
           '& .MuiSlider-thumb': { backgroundColor: '#000000' },
@@ -67,8 +86,8 @@ const ProductSidebar = () => {
         }}
       />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Typography variant="body2" color="text.secondary">₹{priceRange[0]}</Typography>
-        <Typography variant="body2" color="text.secondary">₹{priceRange[1]}</Typography>
+        <Typography variant="body2" color="text.secondary">₹{filters.priceRange[0]}</Typography>
+        <Typography variant="body2" color="text.secondary">₹{filters.priceRange[1]}</Typography>
       </Box>
 
       {/* Brands */}
@@ -77,7 +96,14 @@ const ProductSidebar = () => {
         {['Gallery One', 'Modern Arts', 'Art House', 'Classic Studio'].map((brand) => (
           <FormControlLabel
             key={brand}
-            control={<Checkbox size="small" sx={{ color: '#BDBDBD', '&.Mui-checked': { color: '#000000' } }} />}
+            control={
+              <Checkbox 
+                size="small" 
+                checked={filters.brands.includes(brand)}
+                onChange={(e) => handleCheckboxChange('brands', brand, e.target.checked)}
+                sx={{ color: '#BDBDBD', '&.Mui-checked': { color: '#000000' } }} 
+              />
+            }
             label={<Typography sx={labelStyle}>{brand}</Typography>}
           />
         ))}
@@ -94,7 +120,14 @@ const ProductSidebar = () => {
         ].map((item, idx) => (
           <FormControlLabel
             key={idx}
-            control={<Checkbox size="small" sx={{ color: '#BDBDBD', '&.Mui-checked': { color: '#000000' } }} />}
+            control={
+              <Checkbox 
+                size="small" 
+                checked={filters.ratings.includes(item.val)}
+                onChange={(e) => handleCheckboxChange('ratings', item.val, e.target.checked)}
+                sx={{ color: '#BDBDBD', '&.Mui-checked': { color: '#000000' } }} 
+              />
+            }
             label={
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <CustomStarRating rating={item.val} />
@@ -111,7 +144,14 @@ const ProductSidebar = () => {
         {['In Stock', 'On Sale', 'New Arrivals'].map((status) => (
           <FormControlLabel
             key={status}
-            control={<Checkbox size="small" sx={{ color: '#BDBDBD', '&.Mui-checked': { color: '#000000' } }} />}
+            control={
+              <Checkbox 
+                size="small" 
+                checked={filters.availability.includes(status)}
+                onChange={(e) => handleCheckboxChange('availability', status, e.target.checked)}
+                sx={{ color: '#BDBDBD', '&.Mui-checked': { color: '#000000' } }} 
+              />
+            }
             label={<Typography sx={labelStyle}>{status}</Typography>}
           />
         ))}
