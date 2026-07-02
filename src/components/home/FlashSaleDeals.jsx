@@ -1,39 +1,125 @@
-// import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Box, Container, Grid, Typography, Button, Link, Rating } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 // Asset Imports
 import Flash1 from '../../assets/home/flash1.png';
 import Flash2 from '../../assets/home/flash2.png';
 import Flash3 from '../../assets/home/flash3.png';
 
-const products = [
-  { id: 1, img: Flash1, title: 'Abstract Canvas', artist: 'Maria Santos', rating: 4.8, currentPrice: 299, originalPrice: 399 },
-  { id: 2, img: Flash2, title: 'Modern Sculpture', artist: 'David Chen', rating: 4.9, currentPrice: 299, originalPrice: 399 },
-  { id: 3, img: Flash3, title: 'Vintage Print', artist: 'Elena Rodriguez', rating: 4.7, currentPrice: 299, originalPrice: 399 },
+// Product Detail Modal
+import ProductDetailModal from '../products/ProductDetailModal';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const flashProducts = [
+  {
+    id: 1,
+    imageKey: 'product1',
+    img: Flash1,
+    title: 'Abstract Canvas',
+    artist: 'Maria Santos',
+    description: 'A vibrant exploration of color and form that captures the essence of human emotion. Each brushstroke tells a unique story — a captivating centerpiece for any modern interior.',
+    medium: 'Oil on Canvas',
+    dimensions: '24" × 36" (61 × 91 cm)',
+    year: 2023,
+    rating: 4.8,
+    price: 299,
+    oldPrice: 399,
+    badge: 'SALE',
+    outOfStock: false,
+    category: 'Paintings',
+  },
+  {
+    id: 2,
+    imageKey: 'product2',
+    img: Flash2,
+    title: 'Modern Sculpture',
+    artist: 'David Chen',
+    description: 'A striking contemporary sculpture that redefines the relationship between form and negative space. Handcrafted with precision from premium composite materials.',
+    medium: 'Mixed Media Sculpture',
+    dimensions: '12" × 8" × 20" (30 × 20 × 51 cm)',
+    year: 2023,
+    rating: 4.9,
+    price: 299,
+    oldPrice: 399,
+    badge: 'SALE',
+    outOfStock: false,
+    category: 'Sculptures',
+  },
+  {
+    id: 3,
+    imageKey: 'product3',
+    img: Flash3,
+    title: 'Vintage Print',
+    artist: 'Elena Rodriguez',
+    description: 'A masterfully restored vintage print capturing a timeless Parisian scene. Limited to 30 numbered copies, each signed by the artist on acid-free archival paper.',
+    medium: 'Giclée Print on Archival Paper',
+    dimensions: '18" × 24" (46 × 61 cm)',
+    year: 2022,
+    rating: 4.7,
+    price: 299,
+    oldPrice: 399,
+    badge: 'SALE',
+    outOfStock: false,
+    category: 'Photography',
+  },
 ];
 
 const FlashSaleDeals = () => {
-  const timerBlockStyle = {
-    backgroundColor: '#000000',
-    color: '#FFFFFF',
-    width: 36,
-    height: 36,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontWeight: 700,
-    fontSize: '0.9rem',
-    fontFamily: 'monospace'
-  };
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const sectionRef = useRef(null);
+  const headerRef = useRef(null);
+  const cardsContainerRef = useRef(null);
+
+  // GSAP Animations
+  useEffect(() => {
+    // Header trigger
+    gsap.fromTo(headerRef.current,
+      { opacity: 0, y: -20 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        scrollTrigger: {
+          trigger: headerRef.current,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        }
+      }
+    );
+
+    // Cards staggered transition on enter
+    if (cardsContainerRef.current) {
+      const cards = cardsContainerRef.current.querySelectorAll('.flash-sale-card');
+      gsap.fromTo(cards,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: cardsContainerRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          }
+        }
+      );
+    }
+  }, []);
 
   return (
-    <Box sx={{ backgroundColor: '#FAF8F6', py: { xs: 6, md: 8 }, width: '100%' }}>
+    <Box id="drawings-section" ref={sectionRef} sx={{ backgroundColor: '#FAF8F6', py: { xs: 6, md: 8 }, width: '100%', overflow: 'hidden' }}>
       <Container maxWidth="lg">
-        
-        {/* Main Section Header */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', mb: 4 }}>
+
+        {/* Section Header */}
+        <Box ref={headerRef} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', mb: 4 }}>
           <Typography variant="h5" sx={{ fontFamily: 'serif', fontWeight: 500, fontSize: { xs: '1.25rem', sm: '1.75rem' } }}>
             Flash Sale
           </Typography>
@@ -42,107 +128,115 @@ const FlashSaleDeals = () => {
           </Link>
         </Box>
 
-        {/* Master Layout Grid */}
-        <Grid container spacing={5}>
-          
-          {/* Left Grid Column: 3 Products Side-by-Side on Laptop and Tablet */}
-          <Grid item xs={12} md={9} id="drawings-section">
-            <Grid container spacing={3}>
-              {products.map((prod) => (
-                <Grid item xs={12} sm={4} key={prod.id}>
-                  <Box sx={{ backgroundColor: '#FFFFFF', p: 2, position: 'relative' }}>
-                    
-                    {/* Badge */}
-                    <Box sx={{ position: 'absolute', top: 20, left: 20, zIndex: 10, backgroundColor: '#E0E0E0', px: 1, py: 0.25, borderRadius: 0.5 }}>
-                      <Typography sx={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.05em' }}>SALE</Typography>
-                    </Box>
+        <Grid container spacing={3} ref={cardsContainerRef} sx={{ justifyContent: 'center' }}>
+          {flashProducts.map((prod) => (
+            <Grid item xs={12} sm={4} key={prod.id} className="flash-sale-card">
+              <Box
+                onClick={() => setSelectedProduct(prod)}
+                sx={{
+                  backgroundColor: '#FFFFFF',
+                  p: 2,
+                  position: 'relative',
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  border: '1px solid #EAEAEA',
+                  transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
+                  '&:hover': {
+                    boxShadow: '0 12px 32px rgba(0,0,0,0.12)',
+                    transform: 'translateY(-4px)',
+                    borderColor: '#CCC',
+                  },
+                }}
+              >
+                {/* Badge */}
+                <Box sx={{ position: 'absolute', top: 20, left: 20, zIndex: 10, backgroundColor: '#FFD54F', px: 1.2, py: 0.4, borderRadius: '2px' }}>
+                  <Typography sx={{ fontSize: '0.65rem', fontWeight: 850, letterSpacing: '0.05em', color: '#000000' }}>SALE</Typography>
+                </Box>
 
-                    {/* Quick Access Floating Icons */}
-                    <Box sx={{ position: 'absolute', top: 20, right: 20, zIndex: 10, display: 'flex', flexDirection: 'column', gap: 1 }}>
-                      <Box sx={{ backgroundColor: '#FFFFFF', borderRadius: '50%', p: 0.5, boxShadow: 1, cursor: 'pointer', display: 'flex' }}>
-                        <FavoriteBorderIcon sx={{ fontSize: '0.9rem', color: '#757575' }} />
-                      </Box>
-                      <Box sx={{ backgroundColor: '#FFFFFF', borderRadius: '50%', p: 0.5, boxShadow: 1, cursor: 'pointer', display: 'flex' }}>
-                        <VisibilityIcon sx={{ fontSize: '0.9rem', color: '#757575' }} />
-                      </Box>
-                    </Box>
-
-                    {/* Image Framework Container */}
-                    <Box sx={{ width: '100%', height: 240, overflow: 'hidden', backgroundColor: '#F5F5F5', mb: 2 }}>
-                      <img src={prod.img} alt={prod.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    </Box>
-
-                    {/* Content Meta Text Block */}
-                    <Typography variant="body1" sx={{ fontFamily: 'serif', fontWeight: 500, mb: 0.25 }}>{prod.title}</Typography>
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>{prod.artist}</Typography>
-                    
-                    {/* Star Row metrics */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 2 }}>
-                      <Rating value={prod.rating} precision={0.1} readOnly size="small" sx={{ color: '#000000', fontSize: '0.8rem' }} />
-                      <Typography variant="caption" fontWeight={600} color="text.secondary" sx={{ fontSize: '0.7rem' }}>{prod.rating}</Typography>
-                    </Box>
-
-                    {/* Pricing Actions Row Grid */}
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
-                        <Typography variant="body1" fontWeight={700}>${prod.currentPrice}</Typography>
-                        <Typography variant="caption" color="text.secondary" sx={{ textDecoration: 'line-through' }}>${prod.originalPrice}</Typography>
-                      </Box>
-                      <Button variant="contained" sx={{ backgroundColor: '#000000', color: '#FFFFFF', textTransform: 'none', borderRadius: 0, fontSize: '0.7rem', px: 1.5, py: 0.75, '&:hover': { backgroundColor: '#222222' } }}>
-                        Add to Cart
-                      </Button>
-                    </Box>
-
+                {/* Quick Action Icons */}
+                <Box sx={{ position: 'absolute', top: 20, right: 20, zIndex: 10, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <Box
+                    sx={{
+                      backgroundColor: 'rgba(255,255,255,0.9)',
+                      borderRadius: '50%',
+                      p: 0.6,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      transition: 'all 0.2s',
+                      '&:hover': { backgroundColor: '#FFF', transform: 'scale(1.1)' }
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <FavoriteBorderIcon sx={{ fontSize: '0.95rem', color: '#1A1A1A' }} />
                   </Box>
-                </Grid>
-              ))}
+                  <Box
+                    sx={{
+                      backgroundColor: 'rgba(255,255,255,0.9)',
+                      borderRadius: '50%',
+                      p: 0.6,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      transition: 'all 0.2s',
+                      '&:hover': { backgroundColor: '#FFF', transform: 'scale(1.1)' }
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <VisibilityIcon sx={{ fontSize: '0.95rem', color: '#1A1A1A' }} />
+                  </Box>
+                </Box>
+
+                {/* Image */}
+                <Box sx={{ width: '100%', height: 240, overflow: 'hidden', backgroundColor: '#F5F5F5', mb: 2, borderRadius: '2px' }}>
+                  <img
+                    src={prod.img}
+                    alt={prod.title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
+                    onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.08)'}
+                    onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                  />
+                </Box>
+
+                <Typography variant="body1" sx={{ fontFamily: 'serif', fontWeight: 600, mb: 0.25, color: '#1A1A1A' }}>{prod.title}</Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5, fontWeight: 500 }}>{prod.artist}</Typography>
+
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 2 }}>
+                  <Rating value={prod.rating} precision={0.1} readOnly size="small" sx={{ color: '#FFB300', fontSize: '0.85rem' }} />
+                  <Typography variant="caption" fontWeight={700} color="text.secondary" sx={{ fontSize: '0.75rem' }}>{prod.rating}</Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
+                    <Typography variant="body1" fontWeight={800} color="#1A1A1A">₹{prod.price}</Typography>
+                    <Typography variant="caption" color="text.secondary" sx={{ textDecoration: 'line-through' }}>₹{prod.oldPrice}</Typography>
+                  </Box>
+                  <Button
+                    variant="contained"
+                    onClick={(e) => e.stopPropagation()}
+                    sx={{
+                      backgroundColor: '#1A1A1A',
+                      color: '#FFFFFF',
+                      textTransform: 'none',
+                      borderRadius: '2px',
+                      fontSize: '0.7rem',
+                      px: 2,
+                      py: 0.9,
+                      boxShadow: 'none',
+                      '&:hover': { backgroundColor: '#333', boxShadow: 'none' }
+                    }}
+                  >
+                    Add to Cart
+                  </Button>
+                </Box>
+              </Box>
             </Grid>
-          </Grid>
-
-          {/* Right Grid Column: "Deals Of The Month" Panel */}
-          {/* Aligns horizontally on Laptop (md/lg), and stacks neatly below on Tablet (sm) and Mobile (xs) */}
-          <Grid 
-            item 
-            xs={12} 
-            md={3} 
-            id="artists-section" 
-            sx={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              justifyContent: 'center', 
-              alignItems: { xs: 'center', md: 'center' }, 
-              textAlign: { xs: 'center', md: 'center' }, 
-              pl: { md: 12 } 
-            }}
-          >
-            <Typography variant="h4" sx={{ fontFamily: 'serif', fontWeight: 400, mb: 2, fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' } }}>
-              Deals Of The Month
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3, maxWidth: { xs: 500, md: '100%' }, lineHeight: 1.6 }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Scelerisque duis ultrices sollicitudin aliquam sem. Scelerisque duis ultrices sollicitudin.
-            </Typography>
-            
-            <Button variant="outlined" sx={{ borderColor: '#000000', color: '#000000', borderRadius: 0, textTransform: 'none', px: 4, py: 1, mb: 4, fontWeight: 600, fontSize: '0.8rem', '&:hover': { borderColor: '#333333', backgroundColor: 'rgba(0,0,0,0.02)' } }}>
-              Buy Now
-            </Button>
-
-            <Typography variant="caption" fontWeight={700} color="text.primary" sx={{ display: 'block', mb: 1.5, letterSpacing: '0.02em' }}>
-              Hurry, Before It's Too Late!
-            </Typography>
-
-            {/* Countdown Box Indicators Wrapper Row */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={timerBlockStyle}>23</Box>
-              <Typography fontWeight={700}>:</Typography>
-              <Box sx={timerBlockStyle}>45</Box>
-              <Typography fontWeight={700}>:</Typography>
-              <Box sx={timerBlockStyle}>20</Box>
-            </Box>
-          </Grid>
-
+          ))}
         </Grid>
-
       </Container>
+
+      {/* Product Detail Modal */}
+      <ProductDetailModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
     </Box>
   );
 };

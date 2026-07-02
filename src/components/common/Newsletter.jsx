@@ -1,9 +1,34 @@
-// import React from 'react';
+import { useEffect, useRef } from 'react';
 import { Box, Container, Typography, TextField, Button } from '@mui/material';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Newsletter = () => {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    // Zoom/scale animation on scroll reveal
+    gsap.fromTo(containerRef.current,
+      { opacity: 0, scale: 0.94, y: 30 },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: 0.85,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        }
+      }
+    );
+  }, []);
+
   return (
-    <Box sx={{ backgroundColor: '#1A1A1A', color: '#FFFFFF', py: { xs: 6, sm: 8 }, width: '100%', textAlign: 'center' }}>
+    <Box ref={containerRef} sx={{ backgroundColor: '#1A1A1A', color: '#FFFFFF', py: { xs: 6, sm: 8 }, width: '100%', textAlign: 'center', overflow: 'hidden' }}>
       <Container maxWidth="md">
         
         <Typography variant="h4" sx={{ fontFamily: 'serif', fontWeight: 400, mb: 1.5, fontSize: { xs: '1.5rem', sm: '2rem' } }}>
@@ -52,13 +77,14 @@ const Newsletter = () => {
               backgroundColor: '#616161',
               color: '#FFFFFF',
               textTransform: 'none',
-              fontWeight: 500,
+              fontWeight: 600,
               fontSize: '0.9rem',
               px: 4,
               height: 46,
               borderRadius: { xs: 1, sm: '0 4px 4px 0' },
               boxShadow: 'none',
               whiteSpace: 'nowrap',
+              transition: 'all 0.2s ease',
               '&:hover': { backgroundColor: '#424242', boxShadow: 'none' }
             }}
           >

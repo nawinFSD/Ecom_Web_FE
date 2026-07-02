@@ -1,4 +1,3 @@
-// import React from 'react';
 import { Box, Container, Typography, Link as MuiLink } from '@mui/material';
 
 // Shared Components (Unmodified)
@@ -8,6 +7,7 @@ import Newsletter from '../components/common/Newsletter';
 import HomeFooter from '../components/common/HomeFooter';
 import ProductBanner from '../components/common/ProductBanner';
 import ProductSidebar from '../components/common/ProductSidebar';
+import FloatingActions from '../components/common/FloatingActions';
 
 // Page-Specific Components
 import ProductListView from '../components/products/ProductListView';
@@ -74,6 +74,9 @@ const ProductsListPage = () => {
         <LimitedEdition />
         <Newsletter />
       </Box>
+
+      {/* Shared Interactive widgets */}
+      <FloatingActions />
 
       {/* Bottom Legal Navigation Foot */}
       <HomeFooter />

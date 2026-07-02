@@ -39,12 +39,12 @@ const HomeNavbar = () => {
   };
 
   return (
-    <Box 
-      sx={{ 
-        position: 'sticky', 
-        top: 0, 
-        zIndex: 1200, 
-        backgroundColor: '#FFFFFF', 
+    <Box
+      sx={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 1200,
+        backgroundColor: '#FFFFFF',
         borderBottom: '1px solid #E0E0E0',
         width: '100%'
       }}
@@ -52,7 +52,7 @@ const HomeNavbar = () => {
       <Container maxWidth="xl">
         {/* Main Navbar Top Row */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 72 }}>
-          
+
           {/* Left: Logo */}
           <BrandLogo size="medium" />
 
@@ -62,16 +62,16 @@ const HomeNavbar = () => {
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
-                  href={`#${link.id}`}
+                  href={`#₹{link.id}`}
                   onClick={(e) => handleScroll(e, link.id)}
                   underline="none"
                   color="text.primary"
-                  sx={{ 
-                    fontSize: '0.8rem', 
-                    fontWeight: 600, 
-                    letterSpacing: '0.05em', 
+                  sx={{
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    letterSpacing: '0.05em',
                     cursor: 'pointer',
-                    '&:hover': { color: 'text.secondary' } 
+                    '&:hover': { color: 'text.secondary' }
                   }}
                 >
                   {link.name}
@@ -99,22 +99,22 @@ const HomeNavbar = () => {
               pb: 1.5,
               pt: 0.5,
               webkitOverflowScrolling: 'touch', // Native momentum scrolling for mobile touch
-              '&::-webkit-scrollbar': { display: 'none' }, 
-              msOverflowStyle: 'none', 
+              '&::-webkit-scrollbar': { display: 'none' },
+              msOverflowStyle: 'none',
               scrollbarWidth: 'none',
             }}
           >
             {navLinks.map((link) => (
               <Link
                 key={link.name}
-                href={`#${link.id}`}
+                href={`#₹{link.id}`}
                 onClick={(e) => handleScroll(e, link.id)}
                 underline="none"
                 color="text.primary"
-                sx={{ 
-                  fontSize: '0.75rem', 
-                  fontWeight: 600, 
-                  letterSpacing: '0.05em', 
+                sx={{
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.05em',
                   display: 'inline-block',
                   px: 1,
                   cursor: 'pointer'

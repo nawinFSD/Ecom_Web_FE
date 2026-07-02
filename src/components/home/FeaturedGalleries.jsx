@@ -1,11 +1,15 @@
-// import React from 'react';
+import { useEffect, useRef } from 'react';
 import { Box, Container, Grid, Typography, Link } from '@mui/material';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 // Asset Imports
 import Gallery1 from '../../assets/home/gallery1.png';
 import Gallery2 from '../../assets/home/gallery2.png';
 import Gallery3 from '../../assets/home/gallery3.png';
 import Gallery4 from '../../assets/home/gallery4.png';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const galleries = [
   { id: 1, img: Gallery1 },
@@ -15,11 +19,52 @@ const galleries = [
 ];
 
 const FeaturedGalleries = () => {
+  const containerRef = useRef(null);
+  const textRef = useRef(null);
+
+  useEffect(() => {
+    // Staggered text fade in
+    gsap.fromTo(textRef.current,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        scrollTrigger: {
+          trigger: textRef.current,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        }
+      }
+    );
+
+    // Logos stagger reveal
+    if (containerRef.current) {
+      const logos = containerRef.current.querySelectorAll('.gallery-logo-card');
+      gsap.fromTo(logos,
+        { opacity: 0, scale: 0.85, y: 25 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.12,
+          ease: 'power1.out',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          }
+        }
+      );
+    }
+  }, []);
+
   return (
-    <Box sx={{ backgroundColor: '#FFFFFF', py: { xs: 6, md: 8 }, width: '100%' }}>
+    <Box sx={{ backgroundColor: '#FFFFFF', py: { xs: 6, md: 8 }, width: '100%', overflow: 'hidden' }}>
       <Container maxWidth="xl">
         {/* Header Block */}
-        <Box sx={{ textAlign: 'center', mb: 5 }}>
+        <Box ref={textRef} sx={{ textAlign: 'center', mb: 5 }}>
           <Typography variant="h4" sx={{ fontFamily: 'serif', fontWeight: 400, mb: 1.5, fontSize: { xs: '1.75rem', md: '2.25rem' } }}>
             Featured Galleries
           </Typography>
@@ -29,29 +74,46 @@ const FeaturedGalleries = () => {
         </Box>
 
         {/* Gallery Items Grid */}
-        <Grid container spacing={4} sx={{ justifyContent: 'center' }}>
+        <Grid container spacing={4} ref={containerRef} sx={{ justifyContent: 'center' }}>
           {galleries.map((item) => (
-            <Grid item xs={6} sm={4} md={3} key={item.id}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                <Box 
-                  sx={{ 
-                    width: '100%', 
-                    height: { xs: 60, sm: 80, md: 100 }, 
-                    overflow: 'hidden', 
+            <Grid item xs={6} sm={4} md={3} key={item.id} className="gallery-logo-card">
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  transition: 'all 0.3s',
+                  '&:hover': { transform: 'scale(1.03)' }
+                }}
+              >
+                <Box
+                  sx={{
+                    width: '100%',
+                    height: { xs: 60, sm: 80, md: 100 },
+                    overflow: 'hidden',
                     backgroundColor: '#F5F5F5',
                     mb: 1.5,
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    borderRadius: '4px',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+                    border: '1px solid #EAEAEA',
+                    transition: 'all 0.3s',
+                    '&:hover': {
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+                      borderColor: '#BBB'
+                    }
                   }}
                 >
                   <img src={item.img} alt="Gallery Hub" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </Box>
-                <Link 
-                  href="#" 
-                  underline="always" 
-                  color="text.secondary" 
-                  sx={{ fontSize: '0.75rem', letterSpacing: '0.02em', '&:hover': { color: 'text.primary' } }}
+                <Link
+                  href="#"
+                  underline="always"
+                  color="text.secondary"
+                  sx={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.02em', '&:hover': { color: 'text.primary' } }}
                 >
                   Explore Now
                 </Link>

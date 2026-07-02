@@ -1,4 +1,3 @@
-// import React from 'react';
 import { Box, Container, Typography, Link as MuiLink } from '@mui/material';
 
 // Shared Components
@@ -8,6 +7,7 @@ import Newsletter from '../components/common/Newsletter';
 import HomeFooter from '../components/common/HomeFooter';
 import ProductBanner from '../components/common/ProductBanner';
 import ProductSidebar from '../components/common/ProductSidebar';
+import FloatingActions from '../components/common/FloatingActions';
 
 // Page-Specific Components
 import ProductGrid from '../components/products/ProductGrid';
@@ -35,11 +35,6 @@ const ProductsPage = () => {
             <Typography variant="caption" fontWeight={700} color="text.primary" sx={{ fontSize: '0.8rem' }}>Paintings</Typography>
           </Box>
 
-          {/* 
-            FIX APPLIED HERE: 
-            Using a strict Flexbox layout instead of Grid ensures the sidebar 
-            and product list never wrap or stack on desktop views. 
-          */}
           <Box 
             sx={{ 
               display: 'flex', 
@@ -78,6 +73,9 @@ const ProductsPage = () => {
         <LimitedEdition />
         <Newsletter />
       </Box>
+
+      {/* Shared Interactive widgets */}
+      <FloatingActions />
 
       {/* Bottom Legal Navigation Foot */}
       <HomeFooter />
