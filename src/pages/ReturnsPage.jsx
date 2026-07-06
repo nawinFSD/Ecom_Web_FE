@@ -10,25 +10,25 @@ const ReturnsPage = () => {
 
       <Box component="main" sx={{ flexGrow: 1, py: { xs: 6, md: 10 }, backgroundColor: '#FAF8F6' }}>
         <Container maxWidth="md">
-          <Paper 
-            elevation={0} 
-            sx={{ 
-              p: { xs: 4, sm: 6 }, 
-              borderRadius: 2, 
+          <Paper
+            elevation={0}
+            sx={{
+              p: { xs: 4, sm: 6 },
+              borderRadius: 2,
               border: '1px solid #E5E7EB',
               backgroundColor: '#FFFFFF',
               boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.02)'
             }}
           >
-            <Typography 
-              variant="h3" 
-              component="h1" 
-              sx={{ 
-                fontFamily: 'serif', 
-                fontWeight: 600, 
-                mb: 2, 
+            <Typography
+              variant="h3"
+              component="h1"
+              sx={{
+                fontFamily: 'serif',
+                fontWeight: 600,
+                mb: 2,
                 color: '#1A1A1A',
-                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' } 
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
               }}
             >
               Returns & Refunds
@@ -54,7 +54,7 @@ const ReturnsPage = () => {
                   Transit Damage Policy
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-                  If the package arrives damaged, please document the package with photos and notify our gallery immediately at <strong>returns@pureframe.com</strong>. We will arrange a courier pickup and issue a full refund or exchange.
+                  If the package arrives damaged, please document the package with photos and notify our gallery immediately at <strong>returns@ColorFrame.com</strong>. We will arrange a courier pickup and issue a full refund or exchange.
                 </Typography>
               </Box>
 

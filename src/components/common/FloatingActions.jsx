@@ -10,7 +10,7 @@ import ProductDetailModal from '../products/ProductDetailModal';
 // Special deal product reference matching product1 details
 const specialProduct = {
   id: 1,
-  imageKey: 'product1',
+  imageKey: 'draw6',
   title: 'Abstract Canvas',
   artist: 'Maria Santos',
   description: 'A vibrant exploration of color and form that captures the essence of human emotion. Each brushstroke tells a unique story — a captivating centerpiece for any modern interior.',

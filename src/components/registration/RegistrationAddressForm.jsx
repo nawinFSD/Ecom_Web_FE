@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Box, Button, Grid, Paper, TextField, Typography, Checkbox, FormControlLabel, MenuItem, Link } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddressStepper from './AddressStepper';
 
 const interestCategories = [
-  'Home & Kitchen', 'Toys', 'Electronics', 'Fashion', 'Books', 'Home & Kitchen', 
-  'Sports', 'Beauty', 'Automotive', 'Toys', 'Health', 'Electronics', 'Sports', 
+  'Home & Kitchen', 'Toys', 'Electronics', 'Fashion', 'Books', 'Home & Kitchen',
+  'Sports', 'Beauty', 'Automotive', 'Toys', 'Health', 'Electronics', 'Sports',
   'Fashion', 'Sports', 'Beauty'
 ];
 
@@ -34,7 +35,7 @@ const RegistrationAddressForm = () => {
       elevation={0}
       sx={{
         width: '100%',
-        maxWidth: 720, // Slightly optimized container frame width for longer nested content
+        maxWidth: { xs: '100%', md: 720 }, // Slightly optimized container frame width for longer nested content
         p: { xs: 2.5, sm: 5, md: 6 },
         borderRadius: 3,
         border: '1px solid #E0E0E0',
@@ -46,7 +47,7 @@ const RegistrationAddressForm = () => {
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
         <Typography variant="h5" fontWeight={700} gutterBottom>Create Account</Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3, textAlign: 'center' }}>
-          Join PureFrame and discover amazing artworks
+          Join ColorFrame and discover amazing artworks
         </Typography>
         <AddressStepper />
       </Box>
@@ -56,17 +57,17 @@ const RegistrationAddressForm = () => {
         <Typography variant="subtitle1" fontWeight={700} color="text.primary">
           Shipping Address & Preferences
         </Typography>
-        <Link href="#" variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, textDecoration: 'none', '&:hover': { color: 'text.primary' } }}>
+        <Link component={RouterLink} to="/login" variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, textDecoration: 'none', '&:hover': { color: 'text.primary' } }}>
           <ArrowBackIcon sx={{ fontSize: '0.9rem' }} /> Back
         </Link>
       </Box>
 
       {/* Tab Treatment Header matching the figma selection marker */}
       <Box sx={{ borderBottom: '1px solid #E0E0E0', mb: 3 }}>
-        <Typography 
-          variant="body2" 
-          fontWeight={700} 
-          color="primary" 
+        <Typography
+          variant="body2"
+          fontWeight={700}
+          color="primary"
           sx={{ display: 'inline-block', pb: 1, borderBottom: '2px solid #0066CC', mb: '-1px', cursor: 'pointer' }}
         >
           Primary Shipping Address
@@ -174,7 +175,7 @@ const RegistrationAddressForm = () => {
         {/* Shopping Preferences Sub-Section Outer Box */}
         <Box sx={{ border: '1px solid #E0E0E0', borderRadius: 2, p: { xs: 2, sm: 3 }, mb: 4 }}>
           <Typography variant="body2" fontWeight={700} sx={{ mb: 2 }}>Shopping Preferences</Typography>
-          
+
           {/* Preferred Language Option */}
           <Box sx={{ mb: 2.5 }}>
             <Typography variant="caption" sx={labelStyles}>Preferred Language</Typography>
@@ -238,6 +239,8 @@ const RegistrationAddressForm = () => {
 
         {/* Master Active Step Form Action Button */}
         <Button
+          component={RouterLink}
+          to="/home"
           fullWidth
           variant="contained"
           sx={{

@@ -10,31 +10,31 @@ const ContactUsPage = () => {
 
       <Box component="main" sx={{ flexGrow: 1, py: { xs: 6, md: 10 }, backgroundColor: '#FAF8F6' }}>
         <Container maxWidth="md">
-          <Paper 
-            elevation={0} 
-            sx={{ 
-              p: { xs: 4, sm: 6 }, 
-              borderRadius: 2, 
+          <Paper
+            elevation={0}
+            sx={{
+              p: { xs: 4, sm: 6 },
+              borderRadius: 2,
               border: '1px solid #E5E7EB',
               backgroundColor: '#FFFFFF',
               boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.02)'
             }}
           >
-            <Typography 
-              variant="h3" 
-              component="h1" 
-              sx={{ 
-                fontFamily: 'serif', 
-                fontWeight: 600, 
-                mb: 2, 
+            <Typography
+              variant="h3"
+              component="h1"
+              sx={{
+                fontFamily: 'serif',
+                fontWeight: 600,
+                mb: 2,
                 color: '#1A1A1A',
-                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' } 
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
               }}
             >
               Contact Us
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-              Get in touch with the PureFrame team or visit our Coimbatore gallery space.
+              Get in touch with the ColorFrame team or visit our Coimbatore gallery space.
             </Typography>
 
             <Divider sx={{ mb: 4 }} />
@@ -45,12 +45,12 @@ const ContactUsPage = () => {
                   Our Gallery Location
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7, mb: 2 }}>
-                  PureFrame Gallery<br />
+                  ColorFrame Gallery<br />
                   102, Avinashi Road,<br />
                   Coimbatore, Tamil Nadu - 641018
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-                  <strong>Email:</strong> support@pureframe.com<br />
+                  <strong>Email:</strong> support@ColorFrame.com<br />
                   <strong>Phone:</strong> +91 98765 43210
                 </Typography>
               </Grid>

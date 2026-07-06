@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Box, IconButton, Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { gsap } from 'gsap';
@@ -40,6 +41,7 @@ const slides = [
 ];
 
 const HeroCarousel = ({ height = { xs: 300, sm: 420, md: 560 } }) => {
+  const navigate = useNavigate();
   const [current, setCurrent] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -74,10 +76,7 @@ const HeroCarousel = ({ height = { xs: 300, sm: 420, md: 560 } }) => {
   }, []);
 
   const handleCtaClick = () => {
-    const el = document.getElementById('paintings-section');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    navigate('/products');
   };
 
   const handleMouseEnter = (e) => {

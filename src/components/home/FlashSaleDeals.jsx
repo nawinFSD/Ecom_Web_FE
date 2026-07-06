@@ -18,7 +18,7 @@ gsap.registerPlugin(ScrollTrigger);
 const flashProducts = [
   {
     id: 1,
-    imageKey: 'product1',
+    imageKey: 'draw6',
     img: Flash1,
     title: 'Abstract Canvas',
     artist: 'Maria Santos',
@@ -35,7 +35,7 @@ const flashProducts = [
   },
   {
     id: 2,
-    imageKey: 'product2',
+    imageKey: 'draw5',
     img: Flash2,
     title: 'Modern Sculpture',
     artist: 'David Chen',
@@ -52,7 +52,7 @@ const flashProducts = [
   },
   {
     id: 3,
-    imageKey: 'product3',
+    imageKey: 'sculp2',
     img: Flash3,
     title: 'Vintage Print',
     artist: 'Elena Rodriguez',

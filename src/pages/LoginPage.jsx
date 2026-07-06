@@ -69,7 +69,7 @@ const LoginPage = () => {
                 {text}
               </Typography>
             )}
-            <Link href="/create-account" variant={linkVariant} color="primary" fontWeight={600} underline="none" sx={{ '&:hover': { color: 'primary.dark' }, fontSize: isTablet ? '0.8rem' : '0.875rem' }}>
+            <Link href="/login" variant={linkVariant} color="primary" fontWeight={600} underline="none" sx={{ '&:hover': { color: 'primary.dark' }, fontSize: isTablet ? '0.8rem' : '0.875rem' }}>
               {linkText}
             </Link>
           </Box>

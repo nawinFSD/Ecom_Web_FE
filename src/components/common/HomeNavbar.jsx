@@ -8,12 +8,12 @@ import SearchIconImg from '../../assets/home/search-icon.png';
 import TrolleyIconImg from '../../assets/home/trolly-icon.png';
 import PersonIconImg from '../../assets/home/person-icon.png';
 
-// Define the links and their corresponding HTML element IDs
+// Define the links and their corresponding filters
 const navLinks = [
-  { name: 'PAINTINGS', id: 'paintings-section' },
-  { name: 'DRAWINGS', id: 'drawings-section' },
-  { name: 'SCULPTURE', id: 'sculpture-section' },
-  { name: 'ARTISTS', id: 'artists-section' }
+  { name: 'PAINTINGS', filter: 'paint' },
+  { name: 'DRAWINGS', filter: 'draw' },
+  { name: 'SCULPTURE', filter: 'sculp' },
+  { name: 'ARTISTS', filter: 'artists' }
 ];
 
 const HomeNavbar = () => {
@@ -52,16 +52,12 @@ const HomeNavbar = () => {
     }
   };
 
-  // Smooth scroll handler targeting the center of the viewport
-  const handleScroll = (event, id) => {
+  // NavLink click handler to switch views across all pages
+  const handleNavLinkClick = (event, link) => {
     event.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center', // Centers the targeted element on the screen
-      });
-    }
+    const path = window.location.pathname;
+    const targetPath = path.startsWith('/productsList') ? '/productsList' : '/products';
+    navigate(`${targetPath}?filter=${link.filter}`);
   };
 
   return (
@@ -88,8 +84,8 @@ const HomeNavbar = () => {
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
-                  href={`#${link.id}`}
-                  onClick={(e) => handleScroll(e, link.id)}
+                  href={`/products?filter=${link.filter}`}
+                  onClick={(e) => handleNavLinkClick(e, link)}
                   underline="none"
                   color="text.primary"
                   sx={{
@@ -161,8 +157,8 @@ const HomeNavbar = () => {
             {navLinks.map((link) => (
               <Link
                 key={link.name}
-                href={`#${link.id}`}
-                onClick={(e) => handleScroll(e, link.id)}
+                href={`/products?filter=${link.filter}`}
+                onClick={(e) => handleNavLinkClick(e, link)}
                 underline="none"
                 color="text.primary"
                 sx={{

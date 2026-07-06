@@ -1,7 +1,7 @@
 // import React from 'react';
-import { Box, Typography} from '@mui/material';
+import { Box, Typography } from '@mui/material';
 // Adjust path to your asset
-import LogoAsset from '../../assets/home/Logo.png'; 
+import LogoAsset from '../../assets/home/Logo.png';
 
 const BrandLogo = ({ textColor = 'text.primary', size = 'medium', withText = true }) => {
   const isLarge = size === 'large';
@@ -13,14 +13,14 @@ const BrandLogo = ({ textColor = 'text.primary', size = 'medium', withText = tru
     md: isLarge ? 70 : 40, // laptop/desktop
   };
   const logoHeight = {
-    xs: isLarge ? 50 : 30, 
+    xs: isLarge ? 50 : 30,
     sm: isLarge ? 60 : 35,
     md: isLarge ? 70 : 40,
   };
   const logoFontSize = {
-    xs: isLarge ? '1rem' : '0.8rem',
-    sm: isLarge ? '1.25rem' : '0.9rem',
-    md: isLarge ? '1.5rem' : '1rem',
+    xs: isLarge ? '1.15rem' : '0.95rem',
+    sm: isLarge ? '1.4rem' : '1.1rem',
+    md: isLarge ? '1.65rem' : '1.2rem',
   };
 
   return (
@@ -35,17 +35,17 @@ const BrandLogo = ({ textColor = 'text.primary', size = 'medium', withText = tru
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-        //   color: isLarge ? '#FFFFFF' : '#1A1A1A',
+          //   color: isLarge ? '#FFFFFF' : '#1A1A1A',
           overflow: 'hidden', // Contain the image
           p: isLarge ? 0.5 : 0 // slight padding if it's the dark logo
         }}
       >
-          <img src={LogoAsset} alt="PureFrame Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        <img src={LogoAsset} alt="ColorFrame Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </Box>
       {/* Brand Text */}
       {withText && (
         <Typography variant={isLarge ? 'h6' : 'body1'} fontWeight={500} color="inherit" sx={{ letterSpacing: '0.02em', fontSize: logoFontSize }}>
-          PureFrame
+          ColorFrame
         </Typography>
       )}
     </Box>

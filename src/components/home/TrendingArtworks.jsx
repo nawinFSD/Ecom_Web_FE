@@ -19,7 +19,7 @@ gsap.registerPlugin(ScrollTrigger);
 const trendingProducts = [
   {
     id: 1,
-    imageKey: 'product7',
+    imageKey: 'draw10',
     img: Trend1,
     title: 'Ocean Waves',
     artist: 'Thomas Miller',
@@ -36,7 +36,7 @@ const trendingProducts = [
   },
   {
     id: 2,
-    imageKey: 'product8',
+    imageKey: 'draw11',
     img: Trend2,
     title: 'City Lights',
     artist: 'Sarah Johnson',
@@ -53,7 +53,7 @@ const trendingProducts = [
   },
   {
     id: 3,
-    imageKey: 'product9',
+    imageKey: 'draw12',
     img: Trend3,
     title: 'Forest Path',
     artist: 'Michael Brown',
@@ -70,7 +70,7 @@ const trendingProducts = [
   },
   {
     id: 4,
-    imageKey: 'product10',
+    imageKey: 'draw13',
     img: Trend4,
     title: 'Desert Sunset',
     artist: 'Lisa Wang',

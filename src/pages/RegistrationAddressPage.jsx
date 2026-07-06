@@ -33,7 +33,7 @@ const RegistrationAddressPage = () => {
                 Already have an account?
               </Typography>
             )}
-            <Link href="/login" variant="body2" color="primary" fontWeight={600} underline="none" sx={{ '&:hover': { color: 'primary.dark' }, fontSize: isTablet ? '0.8rem' : '0.875rem' }}>
+            <Link href="/" variant="body2" color="primary" fontWeight={600} underline="none" sx={{ '&:hover': { color: 'primary.dark' }, fontSize: isTablet ? '0.8rem' : '0.875rem' }}>
               Sign In
             </Link>
           </Box>

@@ -10,25 +10,25 @@ const AboutUsPage = () => {
 
       <Box component="main" sx={{ flexGrow: 1, py: { xs: 6, md: 10 }, backgroundColor: '#FAF8F6' }}>
         <Container maxWidth="md">
-          <Paper 
-            elevation={0} 
-            sx={{ 
-              p: { xs: 4, sm: 6 }, 
-              borderRadius: 2, 
+          <Paper
+            elevation={0}
+            sx={{
+              p: { xs: 4, sm: 6 },
+              borderRadius: 2,
               border: '1px solid #E5E7EB',
               backgroundColor: '#FFFFFF',
               boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.02)'
             }}
           >
-            <Typography 
-              variant="h3" 
-              component="h1" 
-              sx={{ 
-                fontFamily: 'serif', 
-                fontWeight: 600, 
-                mb: 2, 
+            <Typography
+              variant="h3"
+              component="h1"
+              sx={{
+                fontFamily: 'serif',
+                fontWeight: 600,
+                mb: 2,
                 color: '#1A1A1A',
-                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' } 
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
               }}
             >
               About Us
@@ -45,7 +45,7 @@ const AboutUsPage = () => {
                   Our Mission
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-                  At PureFrame, we believe that art is a medium of expression that enriches daily lives. Our platform serves as a bridge, allowing local talent, photographers, and independent painters in India to display their premium expressions directly to collectors.
+                  At ColorFrame, we believe that art is a medium of expression that enriches daily lives. Our platform serves as a bridge, allowing local talent, photographers, and independent painters in India to display their premium expressions directly to collectors.
                 </Typography>
               </Box>
 

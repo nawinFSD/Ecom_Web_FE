@@ -43,13 +43,13 @@ const LoginForm = () => {
     >
       {/* Card Header with Large Asset Logo */}
       <Box sx={{ mb: { xs: 2, sm: 2.5, md: 3 } }}>
-        <BrandLogo withText={false}  />
+        <BrandLogo withText={false} />
       </Box>
       <Typography variant={getHeaderVariant()} fontWeight={600} gutterBottom sx={{ mb: 0.5, letterSpacing: '0.01em', fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
         Welcome Back
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: { xs: 3, sm: 4 }, letterSpacing: '0.01em', fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>
-        Sign in to your PureFrame account
+        Sign in to your ColorFrame account
       </Typography>
 
       {/* Social Buttons & Divider (Asset based & responsive) */}
@@ -162,7 +162,7 @@ const LoginForm = () => {
           <Typography variant="caption" color="text.secondary" fontWeight={500} sx={{ letterSpacing: '0.02em', fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
             Don't have an account?
           </Typography>
-          <Link href="/create-account" variant="caption" fontWeight={600} underline="none" color="primary" sx={{ '&:hover': { color: 'primary.dark' }, fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
+          <Link href="/login" variant="caption" fontWeight={600} underline="none" color="primary" sx={{ '&:hover': { color: 'primary.dark' }, fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
             Sign up
           </Link>
         </Box>

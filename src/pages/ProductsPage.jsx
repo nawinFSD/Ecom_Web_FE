@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Box, Container, Typography, Link as MuiLink } from '@mui/material';
+import { useSearchParams } from 'react-router-dom';
+import { Box, Container, Typography, Link as MuiLink, Drawer, useMediaQuery, useTheme } from '@mui/material';
 
 // Shared Components
 import HomeNavbar from '../components/common/HomeNavbar';
@@ -14,6 +15,12 @@ import FloatingActions from '../components/common/FloatingActions';
 import ProductGrid from '../components/products/ProductGrid';
 
 const ProductsPage = () => {
+  const [showFilters, setShowFilters] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [searchParams] = useSearchParams();
+  const filterParam = searchParams.get('filter') || '';
+
   const [filters, setFilters] = useState({
     priceRange: [0, 2000],
     brands: [],
@@ -37,6 +44,14 @@ const ProductsPage = () => {
     });
   };
 
+  const getCategoryTitle = () => {
+    if (filterParam === 'paint') return 'Paintings';
+    if (filterParam === 'draw') return 'Drawings';
+    if (filterParam === 'sculp') return 'Sculpture';
+    if (filterParam === 'artists') return 'Artists';
+    return 'All Artworks';
+  };
+
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#FFFFFF' }}>
       
@@ -56,7 +71,7 @@ const ProductsPage = () => {
             <Typography variant="caption" color="text.secondary">/</Typography>
             <MuiLink href="#" underline="hover" color="text.secondary" sx={{ fontSize: '0.8rem' }}>Categories</MuiLink>
             <Typography variant="caption" color="text.secondary">/</Typography>
-            <Typography variant="caption" fontWeight={700} color="text.primary" sx={{ fontSize: '0.8rem' }}>Paintings</Typography>
+            <Typography variant="caption" fontWeight={700} color="text.primary" sx={{ fontSize: '0.8rem' }}>{getCategoryTitle()}</Typography>
           </Box>
 
           <Box 
@@ -68,15 +83,32 @@ const ProductsPage = () => {
             }}
           >
             
-            {/* Left Box: Fixed Width Sidebar */}
-            <Box 
-              sx={{ 
-                width: { xs: '100%', md: '280px' }, 
-                flexShrink: 0 // Prevents the sidebar from shrinking
-              }}
-            >
-              <ProductSidebar filters={filters} onFilterChange={handleFilterChange} onClearAll={handleClearAll} />
-            </Box>
+            {/* Desktop Sidebar: Shows inline on the left if showFilters is true */}
+            {showFilters && (
+              <Box 
+                sx={{ 
+                  width: '280px', 
+                  flexShrink: 0,
+                  display: { xs: 'none', md: 'block' }
+                }}
+              >
+                <ProductSidebar filters={filters} onFilterChange={handleFilterChange} onClearAll={handleClearAll} />
+              </Box>
+            )}
+
+            {/* Mobile/Tablet Drawer: Slides in when showFilters is true */}
+            {isMobile && (
+              <Drawer
+                anchor="left"
+                open={showFilters}
+                onClose={() => setShowFilters(false)}
+                sx={{ 
+                  '& .MuiDrawer-paper': { width: 280, p: 2, boxSizing: 'border-box' }
+                }}
+              >
+                <ProductSidebar filters={filters} onFilterChange={handleFilterChange} onClearAll={handleClearAll} />
+              </Drawer>
+            )}
             
             {/* Right Box: Fluid Width Product Grid */}
             <Box 
@@ -86,7 +118,11 @@ const ProductsPage = () => {
                 width: '100%' 
               }}
             >
-              <ProductGrid filters={filters} />
+              <ProductGrid 
+                filters={filters} 
+                showFilters={showFilters} 
+                onToggleFilters={() => setShowFilters(!showFilters)} 
+              />
             </Box>
 
           </Box>

@@ -10,25 +10,25 @@ const TermsOfServicePage = () => {
 
       <Box component="main" sx={{ flexGrow: 1, py: { xs: 6, md: 10 }, backgroundColor: '#FAF8F6' }}>
         <Container maxWidth="md">
-          <Paper 
-            elevation={0} 
-            sx={{ 
-              p: { xs: 4, sm: 6 }, 
-              borderRadius: 2, 
+          <Paper
+            elevation={0}
+            sx={{
+              p: { xs: 4, sm: 6 },
+              borderRadius: 2,
               border: '1px solid #E5E7EB',
               backgroundColor: '#FFFFFF',
               boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.02)'
             }}
           >
-            <Typography 
-              variant="h3" 
-              component="h1" 
-              sx={{ 
-                fontFamily: 'serif', 
-                fontWeight: 600, 
-                mb: 2, 
+            <Typography
+              variant="h3"
+              component="h1"
+              sx={{
+                fontFamily: 'serif',
+                fontWeight: 600,
+                mb: 2,
                 color: '#1A1A1A',
-                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' } 
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
               }}
             >
               Terms of Service
@@ -45,7 +45,7 @@ const TermsOfServicePage = () => {
                   1. Terms Acceptance
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-                  By accessing or purchasing from PureFrame, you agree to comply with and be bound by these Terms of Service. If you disagree with any portion of these terms, please do not use our services.
+                  By accessing or purchasing from ColorFrame, you agree to comply with and be bound by these Terms of Service. If you disagree with any portion of these terms, please do not use our services.
                 </Typography>
               </Box>
 
@@ -63,7 +63,7 @@ const TermsOfServicePage = () => {
                   3. Intellectual Property Rights
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-                  All artwork titles, graphics, descriptions, logos, and custom star assets rendered on this platform are owned by PureFrame or its respective licensing artists. You may not duplicate, copy, or redistribute contents without written approval.
+                  All artwork titles, graphics, descriptions, logos, and custom star assets rendered on this platform are owned by ColorFrame or its respective licensing artists. You may not duplicate, copy, or redistribute contents without written approval.
                 </Typography>
               </Box>
 
@@ -81,7 +81,7 @@ const TermsOfServicePage = () => {
                   5. Limitations of Liability
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-                  PureFrame and its developers are not liable for direct, indirect, or accidental damages resulting from temporary platform downtime, package shipping delays, or incorrect dimensions entered during the booking workflow.
+                  ColorFrame and its developers are not liable for direct, indirect, or accidental damages resulting from temporary platform downtime, package shipping delays, or incorrect dimensions entered during the booking workflow.
                 </Typography>
               </Box>
 

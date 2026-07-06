@@ -10,25 +10,25 @@ const PrivacyPolicyPage = () => {
 
       <Box component="main" sx={{ flexGrow: 1, py: { xs: 6, md: 10 }, backgroundColor: '#FAF8F6' }}>
         <Container maxWidth="md">
-          <Paper 
-            elevation={0} 
-            sx={{ 
-              p: { xs: 4, sm: 6 }, 
-              borderRadius: 2, 
+          <Paper
+            elevation={0}
+            sx={{
+              p: { xs: 4, sm: 6 },
+              borderRadius: 2,
               border: '1px solid #E5E7EB',
               backgroundColor: '#FFFFFF',
               boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.02)'
             }}
           >
-            <Typography 
-              variant="h3" 
-              component="h1" 
-              sx={{ 
-                fontFamily: 'serif', 
-                fontWeight: 600, 
-                mb: 2, 
+            <Typography
+              variant="h3"
+              component="h1"
+              sx={{
+                fontFamily: 'serif',
+                fontWeight: 600,
+                mb: 2,
                 color: '#1A1A1A',
-                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' } 
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
               }}
             >
               Privacy Policy
@@ -45,7 +45,7 @@ const PrivacyPolicyPage = () => {
                   1. Introduction
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-                  Welcome to PureFrame. We value your trust and are committed to protecting your personal information. This Privacy Policy describes how we collect, use, share, and safeguard your data when you visit our website or interact with our services.
+                  Welcome to ColorFrame. We value your trust and are committed to protecting your personal information. This Privacy Policy describes how we collect, use, share, and safeguard your data when you visit our website or interact with our services.
                 </Typography>
               </Box>
 
@@ -91,7 +91,7 @@ const PrivacyPolicyPage = () => {
                   5. Third-Party Sharing
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-                  PureFrame does not sell your personal data. We share details only with trusted shipping partners, payment processors, and analytics providers necessary to support core e-commerce interactions.
+                  ColorFrame does not sell your personal data. We share details only with trusted shipping partners, payment processors, and analytics providers necessary to support core e-commerce interactions.
                 </Typography>
               </Box>
 
@@ -100,7 +100,7 @@ const PrivacyPolicyPage = () => {
                   6. Contact Us
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-                  If you have questions about this policy or wish to exercise your data rights, please contact our support team at <strong>support@pureframe.com</strong>.
+                  If you have questions about this policy or wish to exercise your data rights, please contact our support team at <strong>support@ColorFrame.com</strong>.
                 </Typography>
               </Box>
             </Box>

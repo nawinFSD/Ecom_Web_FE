@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Box, Grid, Typography, Container, Link } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -19,6 +20,7 @@ const categories = [
 ];
 
 const ShopByCategory = () => {
+  const navigate = useNavigate();
   const containerRef = useRef(null);
   const headerRef = useRef(null);
 
@@ -67,13 +69,18 @@ const ShopByCategory = () => {
         <Typography variant="h5" sx={{ fontFamily: 'serif', fontWeight: 500, fontSize: { xs: '1.25rem', sm: '1.75rem' } }}>
           Shop by Category
         </Typography>
-        <Link href="#" color="text.secondary" underline="none" sx={{ fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', '&:hover': { color: 'text.primary' } }}>
+        <Link 
+          onClick={() => navigate('/products')}
+          color="text.secondary" 
+          underline="none" 
+          sx={{ fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', cursor: 'pointer', '&:hover': { color: 'text.primary' } }}
+        >
           View All &nbsp; 🡦
         </Link>
       </Box>
 
-      {/* Grid Elements Container centered with right side padding */}
-      <Grid container spacing={3} ref={containerRef} sx={{ justifyContent: 'center', pr: { xs: 2, sm: 4, md: 6 } }}>
+      {/* Grid Elements Container centered */}
+      <Grid container spacing={3} ref={containerRef} sx={{ justifyContent: 'center' }}>
         {categories.map((item) => (
           <Grid
             item
@@ -86,6 +93,7 @@ const ShopByCategory = () => {
           >
             <Box
               id={item.sectionId}
+              onClick={() => navigate('/products')}
               sx={{
                 width: "100%",
                 cursor: "pointer",

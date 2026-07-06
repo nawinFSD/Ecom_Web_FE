@@ -4,8 +4,8 @@ import HomeFooter from '../components/common/HomeFooter';
 import FloatingActions from '../components/common/FloatingActions';
 
 // Reuse product images for blog thumbnails
-import Product1 from '../assets/product/product1.png';
-import Product2 from '../assets/product/product2.png';
+import Draw6 from '../assets/product/draw6.png';
+import Draw5 from '../assets/product/draw5.png';
 
 const BlogPage = () => {
   const posts = [
@@ -13,14 +13,14 @@ const BlogPage = () => {
       id: 1,
       title: "Caring for Your Oil Canvas Paintings",
       desc: "An essential guide outlining how to clean, frame, and preserve textured oil paintings from humidity and direct sun exposure.",
-      img: Product1,
+      img: Draw6,
       date: "June 24, 2026"
     },
     {
       id: 2,
       title: "Modern Color Palettes for Minimalist Living",
       desc: "Learn how modern galleries coordinate abstracts and cityscapes with current wall mount trends and interior layouts.",
-      img: Product2,
+      img: Draw5,
       date: "May 18, 2026"
     }
   ];
@@ -31,28 +31,28 @@ const BlogPage = () => {
 
       <Box component="main" sx={{ flexGrow: 1, py: { xs: 6, md: 10 }, backgroundColor: '#FAF8F6' }}>
         <Container maxWidth="md">
-          <Paper 
-            elevation={0} 
-            sx={{ 
-              p: { xs: 4, sm: 6 }, 
-              borderRadius: 2, 
+          <Paper
+            elevation={0}
+            sx={{
+              p: { xs: 4, sm: 6 },
+              borderRadius: 2,
               border: '1px solid #E5E7EB',
               backgroundColor: '#FFFFFF',
               boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.02)'
             }}
           >
-            <Typography 
-              variant="h3" 
-              component="h1" 
-              sx={{ 
-                fontFamily: 'serif', 
-                fontWeight: 600, 
-                mb: 2, 
+            <Typography
+              variant="h3"
+              component="h1"
+              sx={{
+                fontFamily: 'serif',
+                fontWeight: 600,
+                mb: 2,
                 color: '#1A1A1A',
-                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' } 
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
               }}
             >
-              PureFrame Blog
+              ColorFrame Blog
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
               Insights into the art world, painting frames, preservation tips, and interior coordination.

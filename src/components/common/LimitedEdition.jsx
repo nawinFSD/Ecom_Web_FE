@@ -10,7 +10,7 @@ import LimitedEditionImg from '../../assets/home/limited-edition.png';
 import Trend1 from '../../assets/home/trend1.png';
 import Trend2 from '../../assets/home/trend2.png';
 import Trend3 from '../../assets/home/trend3.png';
-import Gallery1 from '../../assets/product/product7.png';
+import Gallery1 from '../../assets/product/draw10.png';
 import Flash1 from '../../assets/home/flash1.png';
 
 gsap.registerPlugin(ScrollTrigger);

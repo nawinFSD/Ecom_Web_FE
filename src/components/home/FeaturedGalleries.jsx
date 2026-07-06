@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Box, Container, Grid, Typography, Link } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -19,6 +20,7 @@ const galleries = [
 ];
 
 const FeaturedGalleries = () => {
+  const navigate = useNavigate();
   const containerRef = useRef(null);
   const textRef = useRef(null);
 
@@ -110,10 +112,10 @@ const FeaturedGalleries = () => {
                   <img src={item.img} alt="Gallery Hub" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </Box>
                 <Link
-                  href="#"
+                  onClick={() => navigate('/products')}
                   underline="always"
                   color="text.secondary"
-                  sx={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.02em', '&:hover': { color: 'text.primary' } }}
+                  sx={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.02em', cursor: 'pointer', '&:hover': { color: 'text.primary' } }}
                 >
                   Explore Now
                 </Link>

@@ -15,35 +15,61 @@ import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
 
 // Import all product images
-import Product1 from '../../assets/product/product1.png';
-import Product2 from '../../assets/product/product2.png';
-import Product3 from '../../assets/product/product3.png';
-import Product4 from '../../assets/product/product4.png';
-import Product5 from '../../assets/product/product5.png';
-import Product6 from '../../assets/product/product6.png';
-import Product7 from '../../assets/product/product7.png';
-import Product8 from '../../assets/product/product8.png';
-import Product9 from '../../assets/product/product9.png';
-import Product10 from '../../assets/product/product10.png';
-import Product11 from '../../assets/product/product11.png';
-import Product12 from '../../assets/product/product12.png';
+import Draw1 from '../../assets/product/draw1.jpg';
+import Draw2 from '../../assets/product/draw2.jpg';
+import Draw3 from '../../assets/product/draw3.jpg';
+import Draw4 from '../../assets/product/draw4.jpg';
+import Draw5 from '../../assets/product/draw5.png';
+import Draw6 from '../../assets/product/draw6.png';
+import Draw7 from '../../assets/product/draw7.jpg';
+import Draw8 from '../../assets/product/draw8.jpg';
+import Draw9 from '../../assets/product/draw9.png';
+import Draw10 from '../../assets/product/draw10.png';
+import Draw11 from '../../assets/product/draw11.png';
+import Draw12 from '../../assets/product/draw12.png';
+import Draw13 from '../../assets/product/draw13.png';
+import Draw14 from '../../assets/product/draw14.png';
+import Draw15 from '../../assets/product/draw15.jpg';
+
+import Paint1 from '../../assets/product/paint1.jpg';
+import Paint2 from '../../assets/product/paint2.jpg';
+import Paint3 from '../../assets/product/paint3.jpg';
+import Paint4 from '../../assets/product/paint4.jpg';
+import Paint5 from '../../assets/product/paint5.jpg';
+import Paint6 from '../../assets/product/paint6.jpg';
+import Paint7 from '../../assets/product/paint7.jpg';
+import Paint8 from '../../assets/product/paint8.jpg';
+import Paint9 from '../../assets/product/paint9.jpg';
+import Paint10 from '../../assets/product/paint10.jpg';
+import Paint11 from '../../assets/product/paint11.jpg';
+import Paint12 from '../../assets/product/paint12.jpg';
+import Paint13 from '../../assets/product/paint13.jpg';
+import Paint14 from '../../assets/product/paint14.jpg';
+import Paint15 from '../../assets/product/paint15.jpg';
+
+import Sculp1 from '../../assets/product/sculp1.jpg';
+import Sculp2 from '../../assets/product/sculp2.png';
+import Sculp3 from '../../assets/product/sculp3.jpg';
+import Sculp4 from '../../assets/product/sculp4.jpg';
+import Sculp5 from '../../assets/product/sculp5.jpg';
+import Sculp6 from '../../assets/product/sculp6.jpg';
+import Sculp7 from '../../assets/product/sculp7.jpg';
+import Sculp8 from '../../assets/product/sculp8.jpg';
+import Sculp9 from '../../assets/product/sculp9.jpg';
+import Sculp10 from '../../assets/product/sculp10.jpg';
+import Sculp11 from '../../assets/product/sculp11.jpg';
+import Sculp12 from '../../assets/product/sculp12.jpg';
+import Sculp13 from '../../assets/product/sculp13.jpg';
+import Sculp14 from '../../assets/product/sculp14.jpg';
+import Sculp15 from '../../assets/product/sculp15.jpg';
 
 import BrightStar from '../../assets/product/bright-star.png';
 import BrightlessStar from '../../assets/product/brightless-star.png';
 
 const imageMap = {
-  product1: Product1,
-  product2: Product2,
-  product3: Product3,
-  product4: Product4,
-  product5: Product5,
-  product6: Product6,
-  product7: Product7,
-  product8: Product8,
-  product9: Product9,
-  product10: Product10,
-  product11: Product11,
-  product12: Product12,
+  draw1: Draw1, draw2: Draw2, draw3: Draw3, draw4: Draw4, draw5: Draw5, draw6: Draw6, draw7: Draw7, draw8: Draw8, draw9: Draw9, draw10: Draw10, draw11: Draw11, draw12: Draw12, draw13: Draw13, draw14: Draw14, draw15: Draw15,
+  paint1: Paint1, paint2: Paint2, paint3: Paint3, paint4: Paint4, paint5: Paint5, paint6: Paint6, paint7: Paint7, paint8: Paint8, paint9: Paint9, paint10: Paint10, paint11: Paint11, paint12: Paint12, paint13: Paint13, paint14: Paint14, paint15: Paint15,
+  sculp1: Sculp1, sculp2: Sculp2, sculp3: Sculp3, sculp4: Sculp4, sculp5: Sculp5, sculp6: Sculp6, sculp7: Sculp7, sculp8: Sculp8, sculp9: Sculp9, sculp10: Sculp10, sculp11: Sculp11, sculp12: Sculp12, sculp13: Sculp13, sculp14: Sculp14, sculp15: Sculp15
 };
 
 const StarRating = ({ rating }) => (

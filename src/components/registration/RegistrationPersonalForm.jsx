@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Box, Button, Grid, Paper, TextField, Typography, IconButton, InputAdornment } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import RegistrationStepper from './RegistrationStepper';
@@ -47,7 +48,7 @@ const RegistrationPersonalForm = () => {
         Create Account
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 4, textAlign: 'center' }}>
-        Join PureFrame and discover amazing artworks
+        Join ColorFrame and discover amazing artworks
       </Typography>
 
       <RegistrationStepper />
@@ -179,19 +180,21 @@ const RegistrationPersonalForm = () => {
           </Typography>
         </Box>
 
-        {/* Submit Button (Disabled state based on design) */}
+        {/* Submit Button */}
         <Button
+          component={RouterLink}
+          to="/Login2"
           fullWidth
           variant="contained"
-          disabled
           sx={{
             py: 1.5,
-            backgroundColor: '#757575 !important', // Grayed out
-            color: '#FFFFFF !important',
+            backgroundColor: '#1A1A1A',
+            color: '#FFFFFF',
             textTransform: 'none',
             borderRadius: 1.5,
             fontWeight: 600,
             fontSize: '1rem',
+            '&:hover': { backgroundColor: '#333333' }
           }}
         >
           Continue to Address
