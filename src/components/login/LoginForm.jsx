@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Box, Button, Checkbox, FormControlLabel, Link, Paper, TextField, Typography, IconButton, InputAdornment, useMediaQuery, useTheme } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../context/UserContext';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import BrandLogo from '../common/BrandLogo';
@@ -7,6 +9,38 @@ import SocialSignOn from './SocialSignOn';
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorText, setErrorText] = useState('');
+  const { login, register } = useUser();
+  const navigate = useNavigate();
+
+  const handleGoogleLogin = async () => {
+    setErrorText('');
+    const res = await login('google_user@gmail.com', 'GoogleUserPassword123');
+    if (res.success) {
+      navigate('/home');
+    } else {
+      const registerRes = await register({
+        firstName: 'Google',
+        lastName: 'User',
+        email: 'google_user@gmail.com',
+        mobile: '9999999999',
+        password: 'GoogleUserPassword123',
+        addressType: 'Home',
+        pincode: '400001',
+        addressLine1: 'Google Campus',
+        city: 'Delhi',
+        stateProvince: 'Delhi'
+      });
+      if (registerRes.success) {
+        navigate('/home');
+      } else {
+        setErrorText(registerRes.message || 'Google mock login failed');
+      }
+    }
+  };
+
   const theme = useTheme();
   // Check screen size
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -14,9 +48,31 @@ const LoginForm = () => {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleSubmit = (event) => {
+  const validateEmail = (val) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Login submitted');
+    if (!email.trim() || !password) {
+      setErrorText('Please fill in all fields.');
+      return;
+    }
+    if (!validateEmail(email)) {
+      setErrorText('Please enter a valid email address.');
+      return;
+    }
+    if (password.length < 6) {
+      setErrorText('Password must be at least 6 characters.');
+      return;
+    }
+    setErrorText('');
+    const res = await login(email, password);
+    if (res.success) {
+      navigate('/home');
+    } else {
+      setErrorText(res.message);
+    }
   };
 
   // Define dynamic font sizes based on screen size
@@ -53,7 +109,7 @@ const LoginForm = () => {
       </Typography>
 
       {/* Social Buttons & Divider (Asset based & responsive) */}
-      <SocialSignOn />
+      <SocialSignOn onGoogleClick={handleGoogleLogin} />
 
       {/* Main Login Form */}
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: '100%' }}>
@@ -70,6 +126,8 @@ const LoginForm = () => {
           name="email"
           autoComplete="email"
           variant="outlined"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           sx={{
             mb: { xs: 1.5, sm: 2 },
             '& .MuiOutlinedInput-root': {
@@ -97,6 +155,8 @@ const LoginForm = () => {
           id="password"
           autoComplete="current-password"
           variant="outlined"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -135,6 +195,12 @@ const LoginForm = () => {
             Forgot password?
           </Link>
         </Box>
+
+        {errorText && (
+          <Typography variant="body2" color="error" sx={{ mb: 2, fontWeight: 500, fontSize: '0.85rem' }}>
+            {errorText}
+          </Typography>
+        )}
 
         {/* Submit Button - responsive size & typography */}
         <Button

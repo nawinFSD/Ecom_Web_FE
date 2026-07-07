@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Box, Container, Grid, Typography, Button, Link, Rating } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import VisibilityMuiIcon from '@mui/icons-material/Visibility';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -13,12 +14,14 @@ import Trend4 from '../../assets/home/trend4.png';
 
 // Product Detail Modal
 import ProductDetailModal from '../products/ProductDetailModal';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const trendingProducts = [
   {
-    id: 1,
+    id: 101,
     imageKey: 'draw10',
     img: Trend1,
     title: 'Ocean Waves',
@@ -35,7 +38,7 @@ const trendingProducts = [
     category: 'Paintings',
   },
   {
-    id: 2,
+    id: 102,
     imageKey: 'draw11',
     img: Trend2,
     title: 'City Lights',
@@ -52,7 +55,7 @@ const trendingProducts = [
     category: 'Digital Art',
   },
   {
-    id: 3,
+    id: 103,
     imageKey: 'draw12',
     img: Trend3,
     title: 'Forest Path',
@@ -69,7 +72,7 @@ const trendingProducts = [
     category: 'Paintings',
   },
   {
-    id: 4,
+    id: 104,
     imageKey: 'draw13',
     img: Trend4,
     title: 'Desert Sunset',
@@ -88,7 +91,16 @@ const trendingProducts = [
 ];
 
 const TrendingArtworks = () => {
+  const { cartItems, addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const [selectedProduct, setSelectedProduct] = useState(null);
+  
+  const handleAddToCart = (e, art) => {
+    e.stopPropagation();
+    gsap.fromTo(e.currentTarget, { scale: 0.95 }, { scale: 1, duration: 0.3, ease: 'power2.out' });
+    addToCart(art);
+  };
+
   const containerRef = useRef(null);
   const headerRef = useRef(null);
 
@@ -145,8 +157,11 @@ const TrendingArtworks = () => {
 
         {/* Product Cards Row: exactly 4 cards in single row on desktop (md={3}) */}
         <Grid container spacing={3} ref={containerRef} sx={{ justifyContent: 'center', px: { xs: 1, md: 3 } }}>
-          {trendingProducts.map((art) => (
-            <Grid item xs={12} sm={6} md={3} key={art.id} className="trend-card">
+          {trendingProducts.map((art) => {
+            const cartItem = cartItems.find((ci) => ci.productId === art.id);
+            const quantity = cartItem ? cartItem.quantity : 0;
+            return (
+              <Grid item xs={12} sm={6} md={3} key={art.id} className="trend-card">
               <Box
                 onClick={() => setSelectedProduct(art)}
                 sx={{
@@ -190,9 +205,13 @@ const TrendingArtworks = () => {
                         transition: 'all 0.2s',
                         '&:hover': { backgroundColor: '#FFF', transform: 'scale(1.1)' }
                       }}
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e) => { e.stopPropagation(); toggleWishlist(art); }}
                     >
-                      <FavoriteBorderIcon sx={{ fontSize: '1rem', color: '#1A1A1A' }} />
+                      {isInWishlist(art.id) ? (
+                        <FavoriteIcon sx={{ fontSize: '1rem', color: '#E03C3C' }} />
+                      ) : (
+                        <FavoriteBorderIcon sx={{ fontSize: '1rem', color: '#1A1A1A' }} />
+                      )}
                     </Box>
                     <Box
                       sx={{
@@ -267,7 +286,7 @@ const TrendingArtworks = () => {
                     </Typography>
                     <Button
                       variant="contained"
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e) => handleAddToCart(e, art)}
                       sx={{
                         backgroundColor: '#000000',
                         color: '#FFFFFF',
@@ -284,14 +303,14 @@ const TrendingArtworks = () => {
                         }
                       }}
                     >
-                      Add to Cart
+                      {art.outOfStock ? 'Out of Stock' : (quantity > 0 ? `Added (${quantity})` : 'Add to Cart')}
                     </Button>
                   </Box>
                 </Box>
 
               </Box>
             </Grid>
-          ))}
+          )})}
         </Grid>
       </Container>
 

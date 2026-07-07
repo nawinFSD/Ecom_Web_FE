@@ -16,6 +16,12 @@ import AboutUs from "./pages/AboutUsPage";
 import Careers from "./pages/CareersPage";
 import Press from "./pages/PressPage";
 import Blog from "./pages/BlogPage";
+import CartPage from "./pages/CartPage";
+import WishlistPage from "./pages/WishlistPage";
+import ProfilePage from "./pages/ProfilePage";
+import { UserProvider } from "./context/UserContext";
+import { CartProvider } from "./context/CartContext";
+import { WishlistProvider } from "./context/WishlistContext";
 
 // Reset scroll position to top or scroll to target hash ID on route navigation
 const ScrollToTop = () => {
@@ -43,25 +49,34 @@ const ScrollToTop = () => {
 function App() {
   return (
     <BrowserRouter>  
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<LoginPersonal />} />
-        <Route path="/Login2" element={<LoginAddress />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/productsList" element={<ProductsList />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/terms" element={<TermsOfService />} />
-        <Route path="/help-center" element={<HelpCenter />} />
-        <Route path="/shipping-info" element={<ShippingInfo />} />
-        <Route path="/returns" element={<Returns />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/careers" element={<Careers />} />
-        <Route path="/press" element={<Press />} />
-        <Route path="/blog" element={<Blog />} />
-      </Routes>
+      <UserProvider>
+        <CartProvider>
+          <WishlistProvider>
+            <ScrollToTop />
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/login" element={<LoginPersonal />} />
+              <Route path="/Login2" element={<LoginAddress />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/productsList" element={<ProductsList />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/help-center" element={<HelpCenter />} />
+              <Route path="/shipping-info" element={<ShippingInfo />} />
+              <Route path="/returns" element={<Returns />} />
+              <Route path="/contact-us" element={<ContactUs />} />
+              <Route path="/about-us" element={<AboutUs />} />
+              <Route path="/careers" element={<Careers />} />
+              <Route path="/press" element={<Press />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/wishlist" element={<WishlistPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+            </Routes>
+          </WishlistProvider>
+        </CartProvider>
+      </UserProvider>
     </BrowserRouter>
   );
 }

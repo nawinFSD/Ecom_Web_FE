@@ -13,6 +13,7 @@ import productsJson from '../../data/products.json';
 
 // Product Detail Modal
 import ProductDetailModal from './ProductDetailModal';
+import { useCart } from '../../context/CartContext';
 
 // Asset Imports (images mapped by imageKey from JSON)
 import Draw1 from '../../assets/product/draw1.jpg';
@@ -91,6 +92,14 @@ const ProductGrid = ({
   showFilters = false,
   onToggleFilters = () => {}
 }) => {
+  const { cartItems, addToCart } = useCart();
+  
+  const handleAddToCart = (e, prod) => {
+    e.stopPropagation();
+    gsap.fromTo(e.currentTarget, { scale: 0.95 }, { scale: 1, duration: 0.3, ease: 'power2.out' });
+    addToCart(prod);
+  };
+
   const [viewMode, setViewMode] = useState('grid');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [sortBy, setSortBy] = useState('Popularity');
@@ -360,11 +369,11 @@ const ProductGrid = ({
                       
                       <Box sx={{ mt: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Typography variant="body2" fontWeight={700} color="text.primary">
-                          ${prod.price}
+                          ₹{prod.price}
                         </Typography>
                         {prod.oldPrice && (
                           <Typography variant="caption" color="text.secondary" sx={{ textDecoration: 'line-through' }}>
-                            ${prod.oldPrice}
+                            ₹{prod.oldPrice}
                           </Typography>
                         )}
                       </Box>
@@ -378,8 +387,11 @@ const ProductGrid = ({
       ) : (
         <>
           <Grid container spacing={3} ref={gridRef}>
-            {paginatedProducts.map((prod) => (
-              <Grid item xs={12} sm={viewMode === 'list' ? 12 : 6} md={viewMode === 'list' ? 12 : 4} key={prod.id} className="grid-card-item" sx={{ display: 'flex' }}>
+            {paginatedProducts.map((prod) => {
+              const cartItem = cartItems.find((ci) => ci.productId === prod.id);
+              const quantity = cartItem ? cartItem.quantity : 0;
+              return (
+                <Grid item xs={12} sm={viewMode === 'list' ? 12 : 6} md={viewMode === 'list' ? 12 : 4} key={prod.id} className="grid-card-item" sx={{ display: 'flex' }}>
                 <Box
                   onClick={() => handleProductClick(prod)}
                   sx={{
@@ -493,7 +505,7 @@ const ProductGrid = ({
                     >
                       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant="subtitle1" fontWeight={750} color="text.primary">
-                          ${prod.price}
+                          ₹{prod.price}
                         </Typography>
                         {prod.oldPrice && (
                           <Typography
@@ -501,7 +513,7 @@ const ProductGrid = ({
                             color="text.secondary"
                             sx={{ textDecoration: 'line-through' }}
                           >
-                            ${prod.oldPrice}
+                            ₹{prod.oldPrice}
                           </Typography>
                         )}
                       </Box>
@@ -509,6 +521,7 @@ const ProductGrid = ({
                       <Button
                         variant="contained"
                         disabled={prod.outOfStock}
+                        onClick={(e) => handleAddToCart(e, prod)}
                         sx={{
                           textTransform: 'uppercase',
                           fontWeight: 700,
@@ -523,13 +536,13 @@ const ProductGrid = ({
                           '&:hover': { backgroundColor: prod.outOfStock ? '#E0E0E0' : '#333333', boxShadow: 'none' },
                         }}
                       >
-                        Add to Cart
+                        {prod.outOfStock ? 'Out of Stock' : (quantity > 0 ? `Added to Cart (${quantity})` : 'Add to Cart')}
                       </Button>
                     </Box>
                   </Box>
                 </Box>
               </Grid>
-            ))}
+            )})}
           </Grid>
 
           {/* Pagination */}

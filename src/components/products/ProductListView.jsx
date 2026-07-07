@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { Box, Typography, Button, Select, MenuItem, Pagination, PaginationItem } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
 import GridViewIcon from '@mui/icons-material/GridView';
@@ -13,6 +14,8 @@ import productsJson from '../../data/products.json';
 
 // Product Detail Modal
 import ProductDetailModal from './ProductDetailModal';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 // Asset Imports (images mapped by imageKey from JSON)
 import Draw1 from '../../assets/product/draw1.jpg';
@@ -90,6 +93,15 @@ const ProductListView = ({
   showFilters = false,
   onToggleFilters = () => {}
 }) => {
+  const { cartItems, addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
+  
+  const handleAddToCart = (e, prod) => {
+    e.stopPropagation();
+    gsap.fromTo(e.currentTarget, { scale: 0.95 }, { scale: 1, duration: 0.3, ease: 'power2.out' });
+    addToCart(prod);
+  };
+
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [sortBy, setSortBy] = useState('Popularity');
   const [page, setPage] = useState(1);
@@ -366,6 +378,8 @@ const ProductListView = ({
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }} ref={listRef}>
             {paginatedProducts.map((prod) => {
               const displayImg = imageMap[prod.imageKey];
+              const cartItem = cartItems.find((ci) => ci.productId === prod.id);
+              const quantity = cartItem ? cartItem.quantity : 0;
 
               return (
                 <Box
@@ -438,17 +452,39 @@ const ProductListView = ({
                   {/* Actions */}
                   <Box sx={{ display: 'flex', flexDirection: { xs: 'row', sm: 'column' }, justifyContent: 'space-between', alignItems: { xs: 'center', sm: 'flex-end' }, mt: { xs: 1, sm: 0 }, py: { sm: 1 } }}>
                     <Box sx={{ display: 'flex', gap: 1 }}>
-                      {[FavoriteBorderIcon, VisibilityOutlinedIcon, BarChartOutlinedIcon].map((Icon, i) => (
-                        <Box key={i} onClick={(e) => e.stopPropagation()} sx={{ border: '1px solid #E0E0E0', borderRadius: '50%', p: 0.6, cursor: 'pointer', display: 'flex', '&:hover': { backgroundColor: '#F5F5F5' } }}>
-                          <Icon sx={{ fontSize: '1.1rem', color: '#757575' }} />
-                        </Box>
-                      ))}
+                      {/* Heart Wishlist Button */}
+                      <Box 
+                        onClick={(e) => { e.stopPropagation(); toggleWishlist(prod); }} 
+                        sx={{ border: '1px solid #E0E0E0', borderRadius: '50%', p: 0.6, cursor: 'pointer', display: 'flex', '&:hover': { backgroundColor: '#F5F5F5' } }}
+                      >
+                        {isInWishlist(prod.id) ? (
+                          <FavoriteIcon sx={{ fontSize: '1.1rem', color: '#E03C3C' }} />
+                        ) : (
+                          <FavoriteBorderIcon sx={{ fontSize: '1.1rem', color: '#757575' }} />
+                        )}
+                      </Box>
+                      
+                      {/* View Button */}
+                      <Box 
+                        onClick={(e) => { e.stopPropagation(); setSelectedProduct({ ...prod, img: displayImg }); }} 
+                        sx={{ border: '1px solid #E0E0E0', borderRadius: '50%', p: 0.6, cursor: 'pointer', display: 'flex', '&:hover': { backgroundColor: '#F5F5F5' } }}
+                      >
+                        <VisibilityOutlinedIcon sx={{ fontSize: '1.1rem', color: '#757575' }} />
+                      </Box>
+
+                      {/* Chart Button */}
+                      <Box 
+                        onClick={(e) => e.stopPropagation()} 
+                        sx={{ border: '1px solid #E0E0E0', borderRadius: '50%', p: 0.6, cursor: 'pointer', display: 'flex', '&:hover': { backgroundColor: '#F5F5F5' } }}
+                      >
+                        <BarChartOutlinedIcon sx={{ fontSize: '1.1rem', color: '#757575' }} />
+                      </Box>
                     </Box>
 
                     <Button
                       variant="contained"
                       disabled={prod.outOfStock}
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e) => handleAddToCart(e, prod)}
                       sx={{
                         backgroundColor: prod.outOfStock ? '#E0E0E0' : '#1A1A1A',
                         color: prod.outOfStock ? '#9E9E9E' : '#FFFFFF',
@@ -461,7 +497,7 @@ const ProductListView = ({
                         '&:hover': { backgroundColor: prod.outOfStock ? '#E0E0E0' : '#333333', boxShadow: 'none' },
                       }}
                     >
-                      Add to Cart
+                      {prod.outOfStock ? 'Out of Stock' : (quantity > 0 ? `Added to Cart (${quantity})` : 'Add to Cart')}
                     </Button>
                   </Box>
                 </Box>

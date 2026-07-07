@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Button, Grid, Paper, TextField, Typography, IconButton, InputAdornment } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import RegistrationStepper from './RegistrationStepper';
@@ -9,6 +9,93 @@ import SocialRegister from './SocialRegister';
 const RegistrationPersonalForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+
+  const validateEmail = (val) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  };
+
+  const validateMobile = (val) => {
+    return /^[6-9]\d{9}$/.test(val); // 10 digit Indian mobile starting with 6-9
+  };
+
+  const validatePassword = (val) => {
+    // 8+ characters, at least 1 capital letter, 1 number
+    return /^(?=.*[A-Z])(?=.*\d).{8,}$/.test(val);
+  };
+
+  const handleContinue = (e) => {
+    e.preventDefault();
+    const newErrors = {};
+    
+    if (!firstName.trim()) {
+      newErrors.firstName = 'First name is required';
+    } else if (!/^[A-Za-z]+$/.test(firstName.trim())) {
+      newErrors.firstName = 'First name must contain only letters';
+    }
+
+    if (!lastName.trim()) {
+      newErrors.lastName = 'Last name is required';
+    } else if (!/^[A-Za-z]+$/.test(lastName.trim())) {
+      newErrors.lastName = 'Last name must contain only letters';
+    }
+
+    if (!email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!validateEmail(email.trim())) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    if (!mobile.trim()) {
+      newErrors.mobile = 'Mobile number is required';
+    } else if (!validateMobile(mobile.trim())) {
+      newErrors.mobile = 'Mobile must be a valid 10-digit number';
+    }
+
+    if (!password) {
+      newErrors.password = 'Password is required';
+    } else if (!validatePassword(password)) {
+      newErrors.password = 'Password must be 8+ chars with 1 uppercase & 1 number';
+    }
+
+    if (password !== confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    setErrors({});
+    
+    sessionStorage.setItem('reg_personal', JSON.stringify({
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.trim().toLowerCase(),
+      mobile: mobile.trim(),
+      password
+    }));
+    
+    navigate('/Login2');
+  };
+
+  const handleGoogleSignup = () => {
+    sessionStorage.setItem('reg_personal', JSON.stringify({
+      firstName: 'Google',
+      lastName: 'User',
+      email: 'google_user@gmail.com',
+      mobile: '9999999999',
+      password: 'GoogleUserPassword123'
+    }));
+    navigate('/Login2');
+  };
 //   const theme = useTheme();
 //   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -52,76 +139,50 @@ const RegistrationPersonalForm = () => {
       </Typography>
 
       <RegistrationStepper />
-      <SocialRegister />
+      <SocialRegister onGoogleClick={handleGoogleSignup} />
 
-      <Box component="form" noValidate sx={{ width: '100%' }}>
+      <Box component="form" onSubmit={handleContinue} noValidate sx={{ width: '100%' }}>
         {/* First Name & Last Name row */}
         <Grid container spacing={2} sx={{ mb: 2 }}>
           <Grid item xs={12} sm={6}>
             <Typography variant="caption" sx={labelStyles}>First Name *</Typography>
-            <TextField fullWidth id="firstName" placeholder="John" variant="outlined" sx={textFieldStyles} />
+            <TextField fullWidth id="firstName" placeholder="John" variant="outlined" value={firstName} onChange={(e) => setFirstName(e.target.value)} error={!!errors.firstName} helperText={errors.firstName} sx={textFieldStyles} />
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant="caption" sx={labelStyles}>Last Name *</Typography>
-            <TextField fullWidth id="lastName" placeholder="Doe" variant="outlined" sx={textFieldStyles} />
+            <TextField fullWidth id="lastName" placeholder="Doe" variant="outlined" value={lastName} onChange={(e) => setLastName(e.target.value)} error={!!errors.lastName} helperText={errors.lastName} sx={textFieldStyles} />
           </Grid>
         </Grid>
 
-        {/* Email with 60s Button */}
+        {/* Email */}
         <Box sx={{ mb: 2 }}>
           <Typography variant="caption" sx={labelStyles}>Email *</Typography>
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <TextField fullWidth id="email" placeholder="john@example.com" variant="outlined" sx={textFieldStyles} />
-            <Button 
-              variant="contained" 
-              disabled 
-              sx={{ 
-                minWidth: '80px', 
-                backgroundColor: '#757575 !important', // Forced gray for design match
-                color: '#FFFFFF !important', 
-                borderRadius: 1.5,
-                textTransform: 'none'
-              }}
-            >
-              60s
-            </Button>
-          </Box>
+          <TextField fullWidth id="email" placeholder="john@example.com" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} error={!!errors.email} helperText={errors.email} sx={textFieldStyles} />
         </Box>
 
-        {/* Mobile Number with Verify Button */}
+        {/* Mobile Number */}
         <Box sx={{ mb: 2 }}>
           <Typography variant="caption" sx={labelStyles}>Mobile Number *</Typography>
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <TextField
-              fullWidth
-              id="mobile"
-              placeholder="9876543210"
-              variant="outlined"
-              sx={textFieldStyles}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Typography variant="body2" color="text.secondary" sx={{ mr: 1, borderRight: '1px solid #E0E0E0', pr: 1 }}>
-                      +91
-                    </Typography>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <Button 
-              variant="contained" 
-              sx={{ 
-                minWidth: '80px', 
-                backgroundColor: '#000000', 
-                color: '#FFFFFF', 
-                borderRadius: 1.5,
-                textTransform: 'none',
-                '&:hover': { backgroundColor: '#333333' }
-              }}
-            >
-              Verify
-            </Button>
-          </Box>
+          <TextField
+            fullWidth
+            id="mobile"
+            placeholder="9876543210"
+            variant="outlined"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+            error={!!errors.mobile}
+            helperText={errors.mobile}
+            sx={textFieldStyles}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Typography variant="body2" color="text.secondary" sx={{ mr: 1, borderRight: '1px solid #E0E0E0', pr: 1 }}>
+                    +91
+                  </Typography>
+                </InputAdornment>
+              ),
+            }}
+          />
         </Box>
 
         {/* Password Field with Strength Meter */}
@@ -132,6 +193,10 @@ const RegistrationPersonalForm = () => {
             type={showPassword ? 'text' : 'password'}
             placeholder="Create password"
             variant="outlined"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={!!errors.password}
+            helperText={errors.password}
             sx={textFieldStyles}
             InputProps={{
               endAdornment: (
@@ -143,13 +208,6 @@ const RegistrationPersonalForm = () => {
               ),
             }}
           />
-          {/* Password Strength Indicator */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
-            <Box sx={{ flexGrow: 1, height: 4, backgroundColor: '#00C853', borderRadius: 2 }} />
-            <Typography variant="caption" sx={{ fontSize: '0.65rem', fontWeight: 600, color: 'text.primary' }}>
-              Strong
-            </Typography>
-          </Box>
           <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', mt: 0.5, display: 'block' }}>
             8+ chars, 1 number, 1 capital letter
           </Typography>
@@ -163,7 +221,10 @@ const RegistrationPersonalForm = () => {
             type={showConfirmPassword ? 'text' : 'password'}
             placeholder="Confirm password"
             variant="outlined"
-            error // Matches the red error state in the design
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword}
             sx={textFieldStyles}
             InputProps={{
               endAdornment: (
@@ -175,15 +236,11 @@ const RegistrationPersonalForm = () => {
               ),
             }}
           />
-          <Typography variant="caption" sx={{ color: '#d32f2f', fontSize: '0.65rem', mt: 0.5, display: 'block' }}>
-            Passwords do not match
-          </Typography>
         </Box>
 
         {/* Submit Button */}
         <Button
-          component={RouterLink}
-          to="/Login2"
+          type="submit"
           fullWidth
           variant="contained"
           sx={{

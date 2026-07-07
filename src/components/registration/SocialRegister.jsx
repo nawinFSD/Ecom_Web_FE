@@ -1,19 +1,19 @@
-// import React from 'react';
 import { Box, Button, Typography, Divider } from '@mui/material';
 import GoogleIcon from '../../assets/home/G-icon.png';
-import FacebookIcon from '../../assets/home/F-icon.png';
 
-const SocialRegister = () => {
+const SocialRegister = ({ onGoogleClick }) => {
   const buttonStyle = {
-    flex: 1,
+    width: '100%',
     justifyContent: 'center',
     textTransform: 'none',
     borderColor: '#E0E0E0',
-    fontWeight: 500,
+    fontWeight: 650,
     color: 'text.primary',
-    py: 1.25,
+    py: 1.4,
     fontSize: '0.875rem',
     backgroundColor: '#FFFFFF',
+    borderRadius: '4px',
+    boxShadow: 'none',
     '&:hover': { borderColor: '#BDBDBD', backgroundColor: '#F9FAFB' },
   };
 
@@ -21,15 +21,10 @@ const SocialRegister = () => {
 
   return (
     <Box sx={{ width: '100%', mb: 3 }}>
-      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
-        <Button variant="outlined" sx={buttonStyle}>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Button variant="outlined" onClick={onGoogleClick} sx={buttonStyle}>
           <img src={GoogleIcon} alt="Google" style={iconStyle} />
-          Google
-        </Button>
-
-        <Button variant="outlined" sx={buttonStyle}>
-          <img src={FacebookIcon} alt="Facebook" style={iconStyle} />
-          Facebook
+          Sign up with Google
         </Button>
       </Box>
 

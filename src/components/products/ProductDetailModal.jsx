@@ -10,9 +10,13 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
+import { gsap } from 'gsap';
 
 // Import all product images
 import Draw1 from '../../assets/product/draw1.jpg';
@@ -86,6 +90,17 @@ const StarRating = ({ rating }) => (
 );
 
 const ProductDetailModal = ({ product, onClose }) => {
+  const { cartItems, addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
+
+  const handleAddToCart = (e) => {
+    gsap.fromTo(e.currentTarget, { scale: 0.95 }, { scale: 1, duration: 0.3, ease: 'power2.out' });
+    addToCart(product);
+  };
+
+  const cartItem = product ? cartItems.find((ci) => ci.productId === product.id) : null;
+  const quantity = cartItem ? cartItem.quantity : 0;
+
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (product) {
@@ -346,7 +361,7 @@ const ProductDetailModal = ({ product, onClose }) => {
                   ₹{product.oldPrice}
                 </Typography>
                 <Chip
-                  label={`₹{discount}% OFF`}
+                  label={`${discount}% OFF`}
                   size="small"
                   sx={{
                     height: 20,
@@ -424,6 +439,7 @@ const ProductDetailModal = ({ product, onClose }) => {
             <Button
               variant="contained"
               disabled={product.outOfStock}
+              onClick={handleAddToCart}
               startIcon={<ShoppingCartOutlinedIcon />}
               fullWidth
               sx={{
@@ -448,10 +464,11 @@ const ProductDetailModal = ({ product, onClose }) => {
                 },
               }}
             >
-              {product.outOfStock ? 'Out of Stock' : 'Add to Cart'}
+              {product.outOfStock ? 'Out of Stock' : (quantity > 0 ? `Added to Cart (${quantity})` : 'Add to Cart')}
             </Button>
 
             <IconButton
+              onClick={() => toggleWishlist(product)}
               sx={{
                 border: '1.5px solid #E0E0E0',
                 borderRadius: '2px',
@@ -464,7 +481,11 @@ const ProductDetailModal = ({ product, onClose }) => {
                 },
               }}
             >
-              <FavoriteBorderIcon sx={{ fontSize: '1.1rem' }} />
+              {isInWishlist(product.id) ? (
+                <FavoriteIcon sx={{ fontSize: '1.1rem', color: '#E03C3C' }} />
+              ) : (
+                <FavoriteBorderIcon sx={{ fontSize: '1.1rem', color: '#1A1A1A' }} />
+              )}
             </IconButton>
           </Box>
         </Box>

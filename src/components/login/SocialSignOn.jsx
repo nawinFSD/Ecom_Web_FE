@@ -1,25 +1,23 @@
-// import React from 'react';
 import { Box, Button, Typography, Divider } from '@mui/material';
-// Adjust paths to your assets
 import GoogleIcon from '../../assets/home/G-icon.png';
-import FacebookIcon from'../../assets/home/F-icon.png';
 
-const SocialSignOn = () => {
-  // Common button styles for responsiveness
+const SocialSignOn = ({ onGoogleClick }) => {
   const buttonStyle = {
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     textTransform: 'none',
     borderColor: 'divider',
-    fontWeight: 400,
+    fontWeight: 650,
     color: 'text.secondary',
-    px: { xs: 1.5, sm: 2, md: 2.5 }, // responsive horizontal padding
-    py: { xs: 1.25, sm: 1.5 }, // responsive vertical padding
-    fontSize: { xs: '0.9rem', sm: '1rem' }, // responsive text size
-    '&:hover': { borderColor: 'text.secondary' },
+    px: { xs: 1.5, sm: 2, md: 2.5 },
+    py: { xs: 1.25, sm: 1.5 },
+    fontSize: { xs: '0.9rem', sm: '1rem' },
+    borderRadius: '4px',
+    boxShadow: 'none',
+    '&:hover': { borderColor: 'text.secondary', backgroundColor: '#F9FAFB' },
   };
 
   const iconStyle = {
-    width: { xs: 20, sm: 24 }, // responsive icon size
+    width: { xs: 20, sm: 24 },
     height: { xs: 20, sm: 24 },
     marginRight: '8px',
   };
@@ -31,21 +29,11 @@ const SocialSignOn = () => {
         variant="outlined"
         color="inherit"
         fullWidth
+        onClick={onGoogleClick}
         sx={buttonStyle}
         startIcon={<img src={GoogleIcon} alt="Google" style={iconStyle} />}
       >
         Continue with Google
-      </Button>
-
-      {/* Facebook Button with Asset Icon */}
-      <Button
-        variant="outlined"
-        color="inherit"
-        fullWidth
-        sx={buttonStyle}
-        startIcon={<img src={FacebookIcon} alt="Facebook" style={iconStyle} />}
-      >
-        Continue with Facebook
       </Button>
 
       {/* "or" Divider with responsive margins */}

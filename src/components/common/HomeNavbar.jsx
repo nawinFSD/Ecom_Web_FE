@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Box, Container, Link, useTheme, useMediaQuery, TextField } from '@mui/material';
+import { Box, Container, Link, useTheme, useMediaQuery, TextField, Badge } from '@mui/material';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import BrandLogo from './BrandLogo';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 // Asset Imports
 import SearchIconImg from '../../assets/home/search-icon.png';
@@ -23,6 +26,8 @@ const HomeNavbar = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showSearch, setShowSearch] = useState(!!searchParams.get('search'));
   const [searchVal, setSearchVal] = useState(searchParams.get('search') || '');
+  const { totalQuantity } = useCart();
+  const { wishlistItems } = useWishlist();
 
   const iconStyle = {
     width: 20,
@@ -49,6 +54,15 @@ const HomeNavbar = () => {
       const path = window.location.pathname;
       const targetPath = path.startsWith('/productsList') ? '/productsList' : '/products';
       navigate(`${targetPath}?search=${encodeURIComponent(searchVal)}`);
+    }
+  };
+
+  const handleProfileClick = () => {
+    const savedUser = localStorage.getItem('ecom_user');
+    if (savedUser) {
+      navigate('/profile');
+    } else {
+      navigate('/');
     }
   };
 
@@ -133,8 +147,60 @@ const HomeNavbar = () => {
               style={iconStyle} 
               onClick={() => setShowSearch(!showSearch)}
             />
-            <img src={TrolleyIconImg} alt="Cart" style={iconStyle} />
-            <img src={PersonIconImg} alt="Profile" style={iconStyle} />
+            
+            <Badge 
+              badgeContent={wishlistItems.length} 
+              color="primary"
+              sx={{
+                '& .MuiBadge-badge': {
+                  backgroundColor: '#E03C3C',
+                  color: '#FFFFFF',
+                  fontSize: '0.65rem',
+                  height: 16,
+                  minWidth: 16,
+                  padding: '0 4px',
+                }
+              }}
+            >
+              <FavoriteBorderIcon 
+                sx={{ 
+                  fontSize: '1.3rem', 
+                  cursor: 'pointer', 
+                  color: '#1A1A1A',
+                  transition: 'transform 0.2s',
+                  '&:hover': { transform: 'scale(1.15)' } 
+                }}
+                onClick={() => navigate('/wishlist')}
+              />
+            </Badge>
+
+            <Badge 
+              badgeContent={totalQuantity} 
+              color="primary"
+              sx={{
+                '& .MuiBadge-badge': {
+                  backgroundColor: '#1A1A1A',
+                  color: '#FFFFFF',
+                  fontSize: '0.65rem',
+                  height: 16,
+                  minWidth: 16,
+                  padding: '0 4px',
+                }
+              }}
+            >
+              <img 
+                src={TrolleyIconImg} 
+                alt="Cart" 
+                style={iconStyle} 
+                onClick={() => navigate('/cart')}
+              />
+            </Badge>
+            <img 
+              src={PersonIconImg} 
+              alt="Profile" 
+              style={iconStyle} 
+              onClick={handleProfileClick}
+            />
           </Box>
         </Box>
 

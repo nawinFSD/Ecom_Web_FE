@@ -1,3 +1,30 @@
+# Backend & Cart Integration Task List
+
+- [x] Set up Express backend inside `Ecom_BE`
+  - [x] Initialize project and install dependencies (`express`, `mongoose`, `cors`, `dotenv`)
+  - [x] Create `.env` file with MongoDB connection string
+  - [x] Create Cart Mongoose model (`models/cartModel.js`)
+  - [x] Create Cart Express routes (`routes/cartRoutes.js`)
+  - [x] Create main server file (`server.js`)
+- [x] Implement Front-End Cart Service & Context inside `Ecom_FE`
+  - [x] Create API service (`src/services/cartService.js`)
+  - [x] Create Cart Context Provider (`src/context/CartContext.jsx`)
+  - [x] Register new `/cart` route and wrap app in `CartProvider` in `App.jsx`
+- [x] Update Navbar with Cart Badge
+  - [x] Import Cart Context in `HomeNavbar.jsx`
+  - [x] Add item count badge to Cart trolley icon and make it link to `/cart`
+- [x] Build Premium Cart Page
+  - [x] Create `CartPage.jsx` with lists, details, quantity adjustments, checkout simulation, and empty state
+- [x] Connect "Add to Cart" Buttons
+  - [x] `ProductGrid.jsx`
+  - [x] `ProductListView.jsx`
+  - [x] `TrendingArtworks.jsx`
+  - [x] `FlashSaleDeals.jsx`
+  - [x] `ProductDetailModal.jsx`
+- [x] Verification and Testing
+  - [x] Launch backend and frontend
+  - [ ] Validate full integration (add, update, delete, retrieve, checkout)
+
 # Tasks
 
 - [x] 1. Install `gsap` dependency

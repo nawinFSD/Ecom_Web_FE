@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Box, Container, Grid, Typography, Button, Link, Rating } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -12,12 +13,14 @@ import Flash3 from '../../assets/home/flash3.png';
 
 // Product Detail Modal
 import ProductDetailModal from '../products/ProductDetailModal';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const flashProducts = [
   {
-    id: 1,
+    id: 201,
     imageKey: 'draw6',
     img: Flash1,
     title: 'Abstract Canvas',
@@ -34,7 +37,7 @@ const flashProducts = [
     category: 'Paintings',
   },
   {
-    id: 2,
+    id: 202,
     imageKey: 'draw5',
     img: Flash2,
     title: 'Modern Sculpture',
@@ -51,7 +54,7 @@ const flashProducts = [
     category: 'Sculptures',
   },
   {
-    id: 3,
+    id: 203,
     imageKey: 'sculp2',
     img: Flash3,
     title: 'Vintage Print',
@@ -70,7 +73,15 @@ const flashProducts = [
 ];
 
 const FlashSaleDeals = () => {
+  const { cartItems, addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const [selectedProduct, setSelectedProduct] = useState(null);
+  
+  const handleAddToCart = (e, prod) => {
+    e.stopPropagation();
+    gsap.fromTo(e.currentTarget, { scale: 0.95 }, { scale: 1, duration: 0.3, ease: 'power2.out' });
+    addToCart(prod);
+  };
 
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
@@ -129,8 +140,11 @@ const FlashSaleDeals = () => {
         </Box>
 
         <Grid container spacing={3} ref={cardsContainerRef} sx={{ justifyContent: 'center' }}>
-          {flashProducts.map((prod) => (
-            <Grid item xs={12} sm={4} key={prod.id} className="flash-sale-card">
+          {flashProducts.map((prod) => {
+            const cartItem = cartItems.find((ci) => ci.productId === prod.id);
+            const quantity = cartItem ? cartItem.quantity : 0;
+            return (
+              <Grid item xs={12} sm={6} md={4} key={prod.id} className="flash-sale-card">
               <Box
                 onClick={() => setSelectedProduct(prod)}
                 sx={{
@@ -166,9 +180,13 @@ const FlashSaleDeals = () => {
                       transition: 'all 0.2s',
                       '&:hover': { backgroundColor: '#FFF', transform: 'scale(1.1)' }
                     }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <FavoriteBorderIcon sx={{ fontSize: '0.95rem', color: '#1A1A1A' }} />
+                      onClick={(e) => { e.stopPropagation(); toggleWishlist(prod); }}
+                    >
+                      {isInWishlist(prod.id) ? (
+                        <FavoriteIcon sx={{ fontSize: '0.95rem', color: '#E03C3C' }} />
+                      ) : (
+                        <FavoriteBorderIcon sx={{ fontSize: '0.95rem', color: '#1A1A1A' }} />
+                      )}
                   </Box>
                   <Box
                     sx={{
@@ -213,7 +231,7 @@ const FlashSaleDeals = () => {
                   </Box>
                   <Button
                     variant="contained"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => handleAddToCart(e, prod)}
                     sx={{
                       backgroundColor: '#1A1A1A',
                       color: '#FFFFFF',
@@ -226,12 +244,12 @@ const FlashSaleDeals = () => {
                       '&:hover': { backgroundColor: '#333', boxShadow: 'none' }
                     }}
                   >
-                    Add to Cart
+                    {prod.outOfStock ? 'Out of Stock' : (quantity > 0 ? `Added (${quantity})` : 'Add to Cart')}
                   </Button>
                 </Box>
               </Box>
             </Grid>
-          ))}
+          )})}
         </Grid>
       </Container>
 
