@@ -1,5 +1,7 @@
+import { useRef, useCallback } from 'react';
 import { Box, Container, Grid, Typography, Link, Divider } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import { gsap } from 'gsap';
 
 // Asset Imports
 import FbIcon from '../../assets/product/fb-icon.png';
@@ -26,6 +28,179 @@ const footerLinks = [
   }
 ];
 
+// ─── Directional Underline Link Component ───
+const DirectionalUnderlineLink = ({ children, component, to, href, ...props }) => {
+  const underlineRef = useRef(null);
+
+  const handleMouseEnter = useCallback((e) => {
+    const el = e.currentTarget;
+    const underline = underlineRef.current;
+    if (!underline) return;
+
+    const rect = el.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const fromLeft = e.clientX < centerX;
+
+    // Kill existing tweens to avoid conflict
+    gsap.killTweensOf(underline);
+
+    // Instantly set origin and scaleX to 0 from the entry side
+    gsap.set(underline, {
+      transformOrigin: fromLeft ? '0% 50%' : '100% 50%',
+      scaleX: 0,
+    });
+
+    // Animate in
+    gsap.to(underline, {
+      scaleX: 1,
+      duration: 0.35,
+      ease: 'power3.out',
+    });
+  }, []);
+
+  const handleMouseLeave = useCallback((e) => {
+    const el = e.currentTarget;
+    const underline = underlineRef.current;
+    if (!underline) return;
+
+    const rect = el.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const exitLeft = e.clientX < centerX;
+
+    gsap.killTweensOf(underline);
+
+    // Animate out toward the exit direction
+    gsap.to(underline, {
+      scaleX: 0,
+      transformOrigin: exitLeft ? '0% 50%' : '100% 50%',
+      duration: 0.3,
+      ease: 'power3.in',
+    });
+  }, []);
+
+  // Build link props conditionally
+  const linkProps = {};
+  if (component) linkProps.component = component;
+  if (to) linkProps.to = to;
+  if (href) linkProps.href = href;
+
+  return (
+    <Link
+      {...linkProps}
+      {...props}
+      underline="none"
+      color="text.secondary"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      sx={{
+        fontSize: '0.95rem',
+        position: 'relative',
+        display: 'inline-block',
+        cursor: 'pointer',
+        transition: 'color 0.2s ease',
+        '&:hover': { color: 'text.primary' },
+      }}
+    >
+      {children}
+      {/* Directional underline element */}
+      <Box
+        ref={underlineRef}
+        component="span"
+        sx={{
+          position: 'absolute',
+          bottom: -2,
+          left: 0,
+          width: '100%',
+          height: '1.5px',
+          backgroundColor: '#1A1A1A',
+          transformOrigin: '0% 50%',
+          transform: 'scaleX(0)',
+          willChange: 'transform',
+        }}
+      />
+    </Link>
+  );
+};
+
+// ─── Directional Underline Title Component ───
+const DirectionalUnderlineTitle = ({ children }) => {
+  const underlineRef = useRef(null);
+
+  const handleMouseEnter = useCallback((e) => {
+    const el = e.currentTarget;
+    const underline = underlineRef.current;
+    if (!underline) return;
+
+    const rect = el.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const fromLeft = e.clientX < centerX;
+
+    gsap.killTweensOf(underline);
+    gsap.set(underline, {
+      transformOrigin: fromLeft ? '0% 50%' : '100% 50%',
+      scaleX: 0,
+    });
+    gsap.to(underline, {
+      scaleX: 1,
+      duration: 0.35,
+      ease: 'power3.out',
+    });
+  }, []);
+
+  const handleMouseLeave = useCallback((e) => {
+    const el = e.currentTarget;
+    const underline = underlineRef.current;
+    if (!underline) return;
+
+    const rect = el.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const exitLeft = e.clientX < centerX;
+
+    gsap.killTweensOf(underline);
+    gsap.to(underline, {
+      scaleX: 0,
+      transformOrigin: exitLeft ? '0% 50%' : '100% 50%',
+      duration: 0.3,
+      ease: 'power3.in',
+    });
+  }, []);
+
+  return (
+    <Typography
+      variant="body2"
+      fontWeight={600}
+      color="text.primary"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      sx={{
+        mb: 2.5,
+        letterSpacing: '0.10em',
+        fontSize: '1rem',
+        position: 'relative',
+        display: 'inline-block',
+        cursor: 'default',
+      }}
+    >
+      {children}
+      <Box
+        ref={underlineRef}
+        component="span"
+        sx={{
+          position: 'absolute',
+          bottom: -3,
+          left: 0,
+          width: '100%',
+          height: '2px',
+          backgroundColor: '#1A1A1A',
+          transformOrigin: '0% 50%',
+          transform: 'scaleX(0)',
+          willChange: 'transform',
+        }}
+      />
+    </Typography>
+  );
+};
+
 const HomeFooter = () => {
   const socialIconStyle = {
     width: 25,
@@ -33,6 +208,31 @@ const HomeFooter = () => {
     cursor: 'pointer',
     objectFit: 'contain'
   };
+
+  // Social icon hover
+  const socialRefs = useRef([]);
+  const handleSocialEnter = useCallback((index) => {
+    const el = socialRefs.current[index];
+    if (!el) return;
+    gsap.to(el, {
+      scale: 1.2,
+      rotation: 8,
+      y: -3,
+      duration: 0.3,
+      ease: 'elastic.out(1, 0.5)',
+    });
+  }, []);
+  const handleSocialLeave = useCallback((index) => {
+    const el = socialRefs.current[index];
+    if (!el) return;
+    gsap.to(el, {
+      scale: 1,
+      rotation: 0,
+      y: 0,
+      duration: 0.4,
+      ease: 'elastic.out(1, 0.3)',
+    });
+  }, []);
 
   return (
     <Box sx={{ backgroundColor: '#F9FAFB', pt: { xs: 6, md: 8 }, pb: 4, width: '100%', borderTop: '1px solid #E0E0E0' }}>
@@ -56,15 +256,28 @@ const HomeFooter = () => {
 
             {/* Target Social Links Block Grid Row */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'black', borderRadius: '5px' }}>
-                <img src={FbIcon} alt="Facebook Portal Trigger" style={socialIconStyle} />
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'black', borderRadius: '5px' }}>
-                <img src={InstaIcon} alt="Instagram Portal Trigger" style={socialIconStyle} />
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'black', borderRadius: '5px' }}>
-                <img src={XIcon} alt="X Twitter Portal Trigger" style={socialIconStyle} />
-              </Box>
+              {[
+                { src: FbIcon, alt: 'Facebook Portal Trigger' },
+                { src: InstaIcon, alt: 'Instagram Portal Trigger' },
+                { src: XIcon, alt: 'X Twitter Portal Trigger' },
+              ].map((social, index) => (
+                <Box
+                  key={social.alt}
+                  ref={(el) => (socialRefs.current[index] = el)}
+                  onMouseEnter={() => handleSocialEnter(index)}
+                  onMouseLeave={() => handleSocialLeave(index)}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'black',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <img src={social.src} alt={social.alt} style={socialIconStyle} />
+                </Box>
+              ))}
             </Box>
           </Grid>
 
@@ -73,9 +286,7 @@ const HomeFooter = () => {
             <Grid container spacing={{ xs: 10, sm: 12 }}>
               {footerLinks.map((col) => (
                 <Grid item xs={8} sm={4} key={col.title}>
-                  <Typography variant="body2" fontWeight={600} color="text.primary" sx={{ mb: 2.5, letterSpacing: '0.10em', fontSize: '1rem' }}>
-                    {col.title}
-                  </Typography>
+                  <DirectionalUnderlineTitle>{col.title}</DirectionalUnderlineTitle>
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                     {col.links.map((item) => {
                       const routeMap = {
@@ -97,17 +308,14 @@ const HomeFooter = () => {
                       const shopHref = isShopLink ? '/products' : linkHref;
 
                       return (
-                        <Link
+                        <DirectionalUnderlineLink
                           key={item}
                           component={(isRouterLink || isShopLink) ? RouterLink : 'a'}
                           to={(isRouterLink || isShopLink) ? shopHref : undefined}
                           href={(isRouterLink || isShopLink) ? undefined : '#'}
-                          underline="none"
-                          color="text.secondary"
-                          sx={{ fontSize: '0.95rem', '&:hover': { color: 'text.primary' } }}
                         >
                           {item}
-                        </Link>
+                        </DirectionalUnderlineLink>
                       );
                     })}
                   </Box>
