@@ -121,6 +121,9 @@ const HomeNavbar = () => {
     });
   }, []);
 
+  // Track which link is currently hovered for text color
+  const [activeNavIndex, setActiveNavIndex] = useState(-1);
+
   // ─── Gooey Blob Handlers ───
   const handleNavLinkEnter = useCallback((index) => {
     const linkEl = linkRefs.current[index];
@@ -128,29 +131,43 @@ const HomeNavbar = () => {
     const blob = blobRef.current;
     if (!linkEl || !container || !blob) return;
 
+    setActiveNavIndex(index);
+
     const containerRect = container.getBoundingClientRect();
     const linkRect = linkEl.getBoundingClientRect();
 
     // Position blob relative to container
-    const x = linkRect.left - containerRect.left;
-    const width = linkRect.width;
+    const targetX = linkRect.left - containerRect.left;
+    const targetWidth = linkRect.width;
 
-    gsap.to(blob, {
-      x: x - 8,
-      width: width + 16,
+    // First stretch horizontally (viscous rubber-band), then settle
+    const tl = gsap.timeline();
+    tl.to(blob, {
+      x: targetX - 12,
+      width: targetWidth + 24,
       opacity: 1,
       scaleY: 1,
-      duration: 0.5,
-      ease: 'elastic.out(1, 0.5)',
+      scaleX: 1.15,
+      duration: 0.3,
+      ease: 'power3.out',
+    })
+    .to(blob, {
+      x: targetX - 10,
+      width: targetWidth + 20,
+      scaleX: 1,
+      duration: 0.45,
+      ease: 'elastic.out(1.2, 0.4)',
     });
   }, []);
 
   const handleNavContainerLeave = useCallback(() => {
     const blob = blobRef.current;
     if (!blob) return;
+    setActiveNavIndex(-1);
     gsap.to(blob, {
       opacity: 0,
-      scaleY: 0.5,
+      scaleY: 0.6,
+      scaleX: 0.8,
       duration: 0.3,
       ease: 'power2.in',
     });
@@ -159,7 +176,7 @@ const HomeNavbar = () => {
   // Initialize blob as hidden
   useEffect(() => {
     if (blobRef.current) {
-      gsap.set(blobRef.current, { opacity: 0, scaleY: 0.5 });
+      gsap.set(blobRef.current, { opacity: 0, scaleY: 0.6, scaleX: 0.8 });
     }
   }, []);
 
@@ -250,17 +267,17 @@ const HomeNavbar = () => {
                 py: 1,
               }}
             >
-              {/* Gooey Blob Element */}
+              {/* Gooey Blob Element — light dark background */}
               <Box
                 ref={blobRef}
                 sx={{
                   position: 'absolute',
                   top: '50%',
                   left: 0,
-                  height: 34,
-                  borderRadius: '17px',
-                  background: 'linear-gradient(135deg, rgba(26,26,26,0.08) 0%, rgba(26,26,26,0.04) 100%)',
-                  backdropFilter: 'blur(4px)',
+                  height: 36,
+                  borderRadius: '18px',
+                  background: '#2A2A2A',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.15), 0 1px 4px rgba(0,0,0,0.1)',
                   transform: 'translateY(-50%)',
                   pointerEvents: 'none',
                   zIndex: 0,
@@ -276,7 +293,6 @@ const HomeNavbar = () => {
                   onClick={(e) => handleNavLinkClick(e, link)}
                   onMouseEnter={() => handleNavLinkEnter(index)}
                   underline="none"
-                  color="text.primary"
                   sx={{
                     fontSize: '0.8rem',
                     fontWeight: 600,
@@ -284,8 +300,10 @@ const HomeNavbar = () => {
                     cursor: 'pointer',
                     position: 'relative',
                     zIndex: 1,
-                    transition: 'color 0.2s ease',
-                    '&:hover': { color: '#1A1A1A' }
+                    px: 1.5,
+                    py: 0.5,
+                    color: activeNavIndex === index ? '#FFFFFF' : '#1A1A1A',
+                    transition: 'color 0.25s ease',
                   }}
                 >
                   {link.name}
@@ -323,15 +341,15 @@ const HomeNavbar = () => {
             {/* Search Icon */}
             <Box
               ref={searchIconRef}
+              onClick={() => setShowSearch(!showSearch)}
               onMouseEnter={() => handleIconEnter(searchIconRef, 'search')}
               onMouseLeave={() => handleIconLeave(searchIconRef)}
-              sx={{ display: 'inline-flex', cursor: 'pointer' }}
+              sx={{ display: 'inline-flex', cursor: 'pointer', p: 0.5, borderRadius: '50%' }}
             >
               <img
                 src={SearchIconImg}
                 alt="Search"
-                style={iconStyle}
-                onClick={() => setShowSearch(!showSearch)}
+                style={{ ...iconStyle, pointerEvents: 'none' }}
               />
             </Box>
 
@@ -384,15 +402,15 @@ const HomeNavbar = () => {
             >
               <Box
                 ref={cartIconRef}
+                onClick={() => navigate('/cart')}
                 onMouseEnter={() => handleIconEnter(cartIconRef, 'cart')}
                 onMouseLeave={() => handleIconLeave(cartIconRef)}
-                sx={{ display: 'inline-flex', cursor: 'pointer' }}
+                sx={{ display: 'inline-flex', cursor: 'pointer', p: 0.5, borderRadius: '50%' }}
               >
                 <img
                   src={TrolleyIconImg}
                   alt="Cart"
-                  style={iconStyle}
-                  onClick={() => navigate('/cart')}
+                  style={{ ...iconStyle, pointerEvents: 'none' }}
                 />
               </Box>
             </Badge>
@@ -400,15 +418,15 @@ const HomeNavbar = () => {
             {/* Person Icon */}
             <Box
               ref={personIconRef}
+              onClick={handleProfileClick}
               onMouseEnter={() => handleIconEnter(personIconRef, 'default')}
               onMouseLeave={() => handleIconLeave(personIconRef)}
-              sx={{ display: 'inline-flex', cursor: 'pointer' }}
+              sx={{ display: 'inline-flex', cursor: 'pointer', p: 0.5, borderRadius: '50%' }}
             >
               <img
                 src={PersonIconImg}
                 alt="Profile"
-                style={iconStyle}
-                onClick={handleProfileClick}
+                style={{ ...iconStyle, pointerEvents: 'none' }}
               />
             </Box>
           </Box>

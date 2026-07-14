@@ -82,10 +82,11 @@ const HeroCarousel = ({ height = { xs: 300, sm: 420, md: 560 } }) => {
   const handleMouseEnter = (e) => {
     gsap.to(e.currentTarget, {
       scale: 1.08,
-      boxShadow: '0 8px 32px rgba(255,255,255,0.3)',
-      backgroundColor: '#f5f5f5',
-      duration: 0.3,
-      ease: 'power1.out'
+      boxShadow: '0 8px 32px rgba(0,0,0,0.35)',
+      backgroundColor: '#2A2A2A',
+      color: '#FFFFFF',
+      duration: 0.35,
+      ease: 'power2.out'
     });
   };
 
@@ -94,8 +95,9 @@ const HeroCarousel = ({ height = { xs: 300, sm: 420, md: 560 } }) => {
       scale: 1,
       boxShadow: '0 4px 24px rgba(0,0,0,0.18)',
       backgroundColor: '#FFFFFF',
-      duration: 0.3,
-      ease: 'power1.out'
+      color: '#1A1A1A',
+      duration: 0.35,
+      ease: 'power2.out'
     });
   };
 
