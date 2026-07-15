@@ -50,6 +50,8 @@ const RegistrationAddressForm = () => {
   const [landmark, setLandmark] = useState('');
   const [marketingOptIn, setMarketingOptIn] = useState(true);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [selectedInterests, setSelectedInterests] = useState([]);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState('');
@@ -57,42 +59,79 @@ const RegistrationAddressForm = () => {
   const { register } = useUser();
   const navigate = useNavigate();
 
+  const handleInterestClick = (category) => {
+    setSelectedInterests(prev => {
+      if (prev.includes(category)) {
+        return prev.filter(item => item !== category);
+      } else {
+        return [...prev, category];
+      }
+    });
+  };
+
   const triggerConfetti = () => {
-    const colors = ['#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#4CAF50', '#FFEB3B', '#FF9800'];
-    for (let i = 0; i < 40; i++) {
+    const colors = ['#D4583A', '#2D7D9A', '#8B5CF6', '#059669', '#DC2626', '#D97706', '#7C3AED', '#0891B2', '#EC4899', '#E11D48'];
+    const shapes = ['circle', 'square', 'triangle', 'rectangle'];
+
+    for (let i = 0; i < 80; i++) {
       const piece = document.createElement('div');
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
+      const size = gsap.utils.random(8, 16);
+      const width = randomShape === 'rectangle' ? size * 1.5 : size;
+      const height = size;
+
       piece.style.position = 'fixed';
-      piece.style.width = `${gsap.utils.random(8, 14)}px`;
-      piece.style.height = `${gsap.utils.random(8, 14)}px`;
-      piece.style.backgroundColor = gsap.utils.random(colors);
-      piece.style.left = '50vw';
-      piece.style.top = '40vh';
-      piece.style.borderRadius = gsap.utils.random(0, 100) > 50 ? '50%' : '2px';
-      piece.style.zIndex = 99999;
+      piece.style.left = `calc(50vw - ${width / 2}px)`;
+      piece.style.top = `calc(45vh - ${height / 2}px)`;
+      piece.style.width = `${width}px`;
+      piece.style.height = `${height}px`;
+      piece.style.backgroundColor = randomColor;
       piece.style.pointerEvents = 'none';
+      piece.style.zIndex = '99999';
+      piece.style.willChange = 'transform, opacity';
+      piece.style.transform = 'scale(0)';
+
+      if (randomShape === 'circle') {
+        piece.style.borderRadius = '50%';
+      } else if (randomShape === 'triangle') {
+        piece.style.width = '0';
+        piece.style.height = '0';
+        piece.style.backgroundColor = 'transparent';
+        piece.style.borderLeft = `${size / 2}px solid transparent`;
+        piece.style.borderRight = `${size / 2}px solid transparent`;
+        piece.style.borderBottom = `${size}px solid ${randomColor}`;
+      }
+
       document.body.appendChild(piece);
 
-      const angle = gsap.utils.random(240, 300) * (Math.PI / 180);
-      const velocity = gsap.utils.random(250, 500);
-      const xDest = Math.cos(angle) * velocity;
-      const yDest = Math.sin(angle) * velocity;
+      // Physics angles
+      const angle = gsap.utils.random(0, Math.PI * 2);
+      const velocity = gsap.utils.random(200, 500);
+      const destX = Math.cos(angle) * velocity;
+      const destY = Math.sin(angle) * velocity - gsap.utils.random(50, 150);
 
-      gsap.to(piece, {
-        x: `+=${xDest}`,
-        y: `+=${yDest}`,
-        rotation: gsap.utils.random(180, 720),
-        duration: gsap.utils.random(0.6, 1.2),
-        ease: 'power2.out',
+      const tl = gsap.timeline({
         onComplete: () => {
-          gsap.to(piece, {
-            y: '+=500',
-            opacity: 0,
-            rotation: '+=360',
-            duration: gsap.utils.random(1.2, 1.8),
-            ease: 'power1.in',
-            onComplete: () => piece.remove()
-          });
+          piece.remove();
         }
+      });
+
+      tl.to(piece, {
+        scale: gsap.utils.random(0.7, 1.3),
+        x: destX,
+        y: destY,
+        rotation: gsap.utils.random(360, 1080),
+        duration: 0.6,
+        ease: 'power1.out'
+      })
+      .to(piece, {
+        y: '+=600',
+        opacity: 0,
+        scale: 0.2,
+        rotation: '+=360',
+        duration: 1.4,
+        ease: 'power2.in'
       });
     }
   };
@@ -159,16 +198,15 @@ const RegistrationAddressForm = () => {
       stateProvince,
       country,
       language,
-      marketingOptIn
+      marketingOptIn,
+      interests: selectedInterests
     };
     
     const res = await register(registrationData);
     if (res.success) {
       triggerConfetti();
       sessionStorage.removeItem('reg_personal');
-      setTimeout(() => {
-        navigate('/home');
-      }, 2000);
+      setShowWelcomeModal(true);
     } else {
       setSubmitError(res.message);
     }
@@ -190,20 +228,21 @@ const RegistrationAddressForm = () => {
   const labelStyles = { mb: 0.75, display: 'block', fontWeight: 600, fontSize: '0.75rem', color: 'text.primary' };
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        width: '100%',
-        maxWidth: { xs: '100%', md: 600 },
-        p: { xs: 3, sm: 5, md: 6 },
-        borderRadius: 3,
-        border: '1px solid #E0E0E0',
-        backgroundColor: '#FFFFFF',
-        display: 'flex',
-        flexDirection: 'column',
-        boxSizing: 'border-box'
-      }}
-    >
+    <>
+      <Paper
+        elevation={0}
+        sx={{
+          width: '100%',
+          maxWidth: { xs: '100%', md: 600 },
+          p: { xs: 3, sm: 5, md: 6 },
+          borderRadius: 3,
+          border: '1px solid #E0E0E0',
+          backgroundColor: '#FFFFFF',
+          display: 'flex',
+          flexDirection: 'column',
+          boxSizing: 'border-box'
+        }}
+      >
       {/* Top Header Section */}
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
         <Typography variant="h5" fontWeight={700} gutterBottom>Create Account</Typography>
@@ -360,25 +399,33 @@ const RegistrationAddressForm = () => {
           <Box sx={{ mb: 2 }}>
             <Typography variant="caption" sx={labelStyles}>Shopping Interests (Optional)</Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, my: 1.5 }}>
-              {interestCategories.map((category, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    px: 1.5,
-                    py: 0.5,
-                    border: '1px solid #E0E0E0',
-                    borderRadius: 1,
-                    fontSize: '0.65rem',
-                    color: 'text.secondary',
-                    backgroundColor: '#FFFFFF',
-                    cursor: 'pointer',
-                    userSelect: 'none',
-                    '&:hover': { backgroundColor: '#F5F5F5', borderColor: '#BDBDBD' }
-                  }}
-                >
-                  {category}
-                </Box>
-              ))}
+              {interestCategories.map((category, index) => {
+                const isSelected = selectedInterests.includes(category);
+                return (
+                  <Box
+                    key={index}
+                    onClick={() => handleInterestClick(category)}
+                    sx={{
+                      px: 1.5,
+                      py: 0.5,
+                      border: isSelected ? '1px solid #1A1A1A' : '1px solid #E0E0E0',
+                      borderRadius: 1,
+                      fontSize: '0.65rem',
+                      color: isSelected ? '#FFFFFF' : 'text.secondary',
+                      backgroundColor: isSelected ? '#1A1A1A' : '#FFFFFF',
+                      cursor: 'pointer',
+                      userSelect: 'none',
+                      transition: 'all 0.2s ease',
+                      '&:hover': { 
+                        backgroundColor: isSelected ? '#333333' : '#F5F5F5', 
+                        borderColor: isSelected ? '#1A1A1A' : '#BDBDBD' 
+                      }
+                    }}
+                  >
+                    {category}
+                  </Box>
+                );
+              })}
             </Box>
             <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', display: 'block', mb: 2 }}>
               Select categories you're interested in for personalized recommendations
@@ -438,6 +485,48 @@ const RegistrationAddressForm = () => {
 
       </Box>
     </Paper>
+
+      {/* Welcome Dialog Modal - Custom Tailwind CSS */}
+      {showWelcomeModal && (
+        <div className="fixed inset-0 z-[100000] flex items-center justify-center p-4 animate-in fade-in duration-300">
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity duration-300"
+            onClick={() => {
+              setShowWelcomeModal(false);
+              navigate('/home');
+            }}
+          ></div>
+          
+          {/* Modal Card */}
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full text-center relative z-10 shadow-2xl border border-slate-100 transform transition-all duration-300 scale-100 animate-in fade-in zoom-in-95 duration-300">
+            {/* Sparkles / Celebration Icon */}
+            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-indigo-50 mb-6">
+              <svg className="h-8 w-8 text-indigo-600 animate-bounce" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" />
+              </svg>
+            </div>
+            
+            <h3 className="text-2xl font-extrabold text-slate-900 mb-2">
+              Welcome to ColorFrame!
+            </h3>
+            <p className="text-sm text-slate-500 mb-6 leading-relaxed">
+              Your account has been created successfully. Welcome to our curated community of collectors and independent artists!
+            </p>
+            <button 
+              onClick={() => {
+                setShowWelcomeModal(false);
+                navigate('/home');
+              }}
+              className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-4 rounded-xl transition-colors duration-200 cursor-pointer shadow-md hover:shadow-lg"
+            >
+              Explore the Gallery
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

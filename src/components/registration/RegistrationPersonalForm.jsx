@@ -194,23 +194,44 @@ const RegistrationPersonalForm = () => {
             placeholder="Create password"
             variant="outlined"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              setPassword(val);
+              
+              // Dynamic clear error if valid
+              if (validatePassword(val)) {
+                setErrors(prev => {
+                  const newErrs = { ...prev };
+                  delete newErrs.password;
+                  return newErrs;
+                });
+              } else if (errors.password) {
+                setErrors(prev => ({
+                  ...prev,
+                  password: 'Password must be 8+ chars with 1 uppercase & 1 number'
+                }));
+              }
+            }}
             error={!!errors.password}
             helperText={errors.password}
             sx={textFieldStyles}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" size="small">
-                    {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-                  </IconButton>
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" size="small">
+                      {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }
             }}
           />
-          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', mt: 0.5, display: 'block' }}>
-            8+ chars, 1 number, 1 capital letter
-          </Typography>
+          {password && !validatePassword(password) && !errors.password && (
+            <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', mt: 0.5, display: 'block' }}>
+              8+ chars, 1 number, 1 capital letter
+            </Typography>
+          )}
         </Box>
 
         {/* Confirm Password Field with Error State */}
@@ -222,18 +243,30 @@ const RegistrationPersonalForm = () => {
             placeholder="Confirm password"
             variant="outlined"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              setConfirmPassword(val);
+              if (val === password) {
+                setErrors(prev => {
+                  const newErrs = { ...prev };
+                  delete newErrs.confirmPassword;
+                  return newErrs;
+                });
+              }
+            }}
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword}
             sx={textFieldStyles}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end" size="small">
-                    {showConfirmPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-                  </IconButton>
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end" size="small">
+                      {showConfirmPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }
             }}
           />
         </Box>
