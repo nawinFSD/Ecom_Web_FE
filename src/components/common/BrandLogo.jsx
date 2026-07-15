@@ -5,7 +5,7 @@ import { gsap } from 'gsap';
 import LogoAsset from '../../assets/home/Logo.png';
 
 // Art-inspired color palette for letter morphing
-const morphColors = ['#D4583A', '#2D7D9A', '#8B5CF6', '#059669', '#DC2626', '#D97706', '#7C3AED', '#0891B2', '#1A1A1A', '#E11D48'];
+const morphColors = ['#D4583A', '#2D7D9A', '#8B5CF6', '#059669', '#DC2626', '#D97706', '#7C3AED', '#0891B2', '#EC4899', '#E11D48'];
 
 const BrandLogo = ({ textColor = 'text.primary', size = 'medium', withText = true }) => {
   const isLarge = size === 'large';
@@ -89,7 +89,7 @@ const BrandLogo = ({ textColor = 'text.primary', size = 'medium', withText = tru
         scaleX: 1,
         skewX: 0,
         rotation: 0,
-        color: 'inherit',
+        color: morphColors[i % morphColors.length],
         y: 0,
         duration: 0.4,
         ease: 'elastic.out(1, 0.3)',
@@ -149,6 +149,7 @@ const BrandLogo = ({ textColor = 'text.primary', size = 'medium', withText = tru
                 display: 'inline-block',
                 willChange: 'transform',
                 transformOrigin: 'bottom center',
+                color: morphColors[index % morphColors.length]
               }}
             >
               {letter}

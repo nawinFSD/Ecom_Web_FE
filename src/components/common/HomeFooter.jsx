@@ -251,7 +251,7 @@ const HomeFooter = () => {
             </Box>
 
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6, maxWidth: 320, textAlign: 'left', fontSize: '0.95rem' }}>
-              Capturing eternal moments with passion and creativity. Your trusted partner for wedding and candid photography in Coimbatore.
+              Crafting lasting memories with expertise and artistry. Your reliable partner for wedding and candid photography in Salem.
             </Typography>
 
             {/* Target Social Links Block Grid Row */}

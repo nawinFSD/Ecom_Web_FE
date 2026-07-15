@@ -24,6 +24,12 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close';
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
+import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
+import InfoIcon from '@mui/icons-material/Info';
 
 // Layout Components
 import HomeNavbar from '../components/common/HomeNavbar';
@@ -536,190 +542,173 @@ const CartPage = () => {
         }}
         PaperProps={{
           sx: { 
-            borderRadius: '16px', 
-            p: { xs: 3, sm: 4.5 }, 
+            borderRadius: '24px', 
+            p: 0, 
             width: '100%', 
-            maxWidth: 500,
-            boxShadow: '0px 20px 40px rgba(0, 0, 0, 0.1)',
-            border: '1px solid rgba(0, 0, 0, 0.05)'
+            maxWidth: 540,
+            boxShadow: 'none',
+            border: 'none',
+            backgroundColor: 'transparent',
+            overflow: 'visible'
           }
         }}
       >
         {!orderComplete ? (
           !user ? (
             /* User must be logged in to checkout */
-            <>
-              <DialogTitle sx={{ fontWeight: 800, fontSize: '1.5rem', pb: 2, px: 0, textAlign: 'center', fontFamily: '"Outfit", sans-serif' }}>
+            <div className="bg-white rounded-3xl border border-slate-100 shadow-2xl p-8 text-center font-sans">
+              <h2 className="text-2xl font-bold text-slate-900 mb-3 tracking-tight">
                 Sign In Required
-              </DialogTitle>
-              <DialogContent sx={{ p: 0, textAlign: 'center' }}>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 4, px: 1, lineHeight: 1.6 }}>
-                  Please sign in to your ColorFrame account to place your order and use your saved delivery address.
-                </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <Button
-                    variant="contained"
-                    onClick={() => navigate('/')}
-                    sx={{
-                      backgroundColor: '#1A1A1A',
-                      color: '#FFFFFF',
-                      borderRadius: '8px',
-                      py: 1.6,
-                      fontWeight: 700,
-                      boxShadow: 'none',
-                      textTransform: 'none',
-                      '&:hover': { backgroundColor: '#333333', boxShadow: 'none' }
-                    }}
-                  >
-                    Go to Sign In
-                  </Button>
-                  <Button
-                    variant="text"
-                    onClick={() => setCheckoutOpen(false)}
-                    sx={{ color: '#777777', textTransform: 'none', fontWeight: 600 }}
-                  >
-                    Cancel
-                  </Button>
-                </Box>
-              </DialogContent>
-            </>
+              </h2>
+              <p className="text-sm text-slate-500 leading-relaxed mb-6 max-w-sm mx-auto">
+                Please sign in to your ColorFrame account to place your order and use your saved delivery address.
+              </p>
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => navigate('/')}
+                  className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-4 rounded-xl transition-all cursor-pointer shadow-sm text-sm"
+                >
+                  Go to Sign In
+                </button>
+                <button
+                  onClick={() => setCheckoutOpen(false)}
+                  className="w-full text-slate-500 hover:text-slate-900 font-semibold py-2 text-sm transition-all cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           ) : (
             /* Logged in checkout confirmation popup */
-            <>
-              <DialogTitle sx={{ fontWeight: 850, fontSize: '1.65rem', pb: 0.5, px: 0, fontFamily: '"Outfit", sans-serif', color: '#1A1A1A' }}>
-                Confirm Order
-              </DialogTitle>
-              <Typography variant="body2" color="text.secondary" sx={{ display: 'block', mb: 3.5, fontSize: '0.85rem' }}>
-                Please review your saved delivery details below.
-              </Typography>
+            <div className="bg-white rounded-3xl border border-slate-100 shadow-2xl p-6 sm:p-8 font-sans text-left">
+              <div className="flex justify-between items-center mb-1">
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Review Your Order</h2>
+                <button 
+                  onClick={() => setCheckoutOpen(false)}
+                  className="text-slate-400 hover:text-slate-950 transition-colors p-1.5 rounded-full hover:bg-slate-100 cursor-pointer"
+                >
+                  <CloseIcon />
+                </button>
+              </div>
 
-              <DialogContent sx={{ p: 0, overflowY: 'visible' }}>
-                {checkoutLoading ? (
-                  <Box sx={{ py: 6, textAlign: 'center' }}>
-                    <CircularProgress color="inherit" sx={{ mb: 2 }} />
-                    <Typography variant="body2" color="text.secondary" fontWeight={500}>
-                      Processing secure transaction...
-                    </Typography>
-                  </Box>
-                ) : (
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                    {/* Delivery address display card */}
-                    <Box 
-                      sx={{ 
-                        p: 3, 
-                        backgroundColor: '#FAF9F8', 
-                        border: '1px solid #EAEAEA', 
-                        borderRadius: '12px',
-                        textAlign: 'left',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 1.75
-                      }}
-                    >
-                      <Typography variant="caption" fontWeight={800} color="#777777" sx={{ textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.7rem' }}>
-                        DELIVERY DETAILS
-                      </Typography>
-                      
-                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
-                        <Typography variant="body1" fontWeight={750} color="#1A1A1A" sx={{ fontSize: '1.05rem' }}>
-                          {user.firstName} {user.lastName}
-                        </Typography>
-                        
-                        <Typography variant="body2" color="#4A4A4A" sx={{ lineHeight: 1.6, fontSize: '0.9rem' }}>
+              <p className="text-sm text-slate-500 mb-6">
+                Please verify your delivery details before placing your order.
+              </p>
+
+              {checkoutLoading ? (
+                <div className="py-12 text-center flex flex-col items-center justify-center gap-4">
+                  <div className="w-10 h-10 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin"></div>
+                  <p className="text-sm text-slate-500 font-medium">
+                    Processing secure transaction...
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-5">
+                  {/* Delivery address display card */}
+                  <div className="bg-slate-50/50 border border-slate-200/80 rounded-2xl p-5 sm:p-6 flex flex-col gap-5">
+                    {/* Delivery Details Row */}
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
+                        <PlaceOutlinedIcon className="text-indigo-600" style={{ fontSize: 20 }} />
+                      </div>
+                      <span className="font-bold text-base text-slate-900">Delivery Details</span>
+                    </div>
+
+                    {/* User address Row */}
+                    <div className="flex items-start gap-3">
+                      <div className="w-9 h-9 rounded-full bg-slate-200/80 flex items-center justify-center shrink-0">
+                        <PersonOutlinedIcon className="text-slate-600" style={{ fontSize: 20 }} />
+                      </div>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-bold text-base text-slate-900">{user.firstName} {user.lastName}</span>
+                        <span className="text-sm text-slate-600 leading-relaxed">
                           {user.addressLine1}
                           {user.addressLine2 ? `, ${user.addressLine2}` : ''}
                           {user.area ? `, ${user.area}` : ''}
                           <br />
                           {user.city}, {user.stateProvince} - {user.pincode}
-                          <br />
-                          <strong>{user.country}</strong>
-                        </Typography>
-                      </Box>
+                        </span>
+                        <span className="font-bold text-sm text-slate-900 mt-0.5">{user.country}</span>
+                      </div>
+                    </div>
 
-                      <Divider sx={{ my: 0.5, borderColor: '#EAEAEA' }} />
+                    <hr className="border-slate-200/60" />
 
-                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                        <Typography variant="caption" sx={{ color: '#666666', fontSize: '0.8rem', display: 'block' }}>
-                          <strong>Phone:</strong> +91 {user.mobile}
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: '#666666', fontSize: '0.8rem', display: 'block' }}>
-                          <strong>Email:</strong> {user.email}
-                        </Typography>
-                      </Box>
-                    </Box>
+                    {/* Phone Row */}
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-emerald-50/80 flex items-center justify-center shrink-0">
+                        <PhoneOutlinedIcon className="text-emerald-600" style={{ fontSize: 20 }} />
+                      </div>
+                      <div className="flex items-center w-full">
+                        <span className="font-bold text-sm text-slate-900 w-[100px] shrink-0">Phone</span>
+                        <span className="text-sm text-slate-600">+91 {user.mobile}</span>
+                      </div>
+                    </div>
 
-                    <Typography variant="caption" color="text.secondary" align="center" sx={{ display: 'block', px: 1, lineHeight: 1.5 }}>
-                      By confirming, your order will be instantly placed and dispatched to the address listed above.
-                    </Typography>
+                    {/* Email Row */}
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-sky-50 flex items-center justify-center shrink-0">
+                        <MailOutlinedIcon className="text-sky-600" style={{ fontSize: 20 }} />
+                      </div>
+                      <div className="flex items-center w-full">
+                        <span className="font-bold text-sm text-slate-900 w-[100px] shrink-0">Email</span>
+                        <span className="text-sm text-slate-600">{user.email}</span>
+                      </div>
+                    </div>
+                  </div>
 
-                    <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
-                      <Button 
-                        variant="outlined" 
-                        onClick={() => setCheckoutOpen(false)}
-                        fullWidth
-                        sx={{ 
-                          borderRadius: '8px', 
-                          py: 1.4, 
-                          textTransform: 'none', 
-                          fontWeight: 700, 
-                          color: '#555555', 
-                          borderColor: '#D0D0D0',
-                          '&:hover': { borderColor: '#1A1A1A', color: '#1A1A1A', backgroundColor: '#FAF8F6' }
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                      <Button 
-                        variant="contained" 
-                        onClick={handleCheckout}
-                        fullWidth
-                        sx={{ 
-                          borderRadius: '8px', 
-                          py: 1.4, 
-                          textTransform: 'none', 
-                          fontWeight: 700, 
-                          backgroundColor: '#1A1A1A', 
-                          color: '#FFFFFF', 
-                          boxShadow: 'none', 
-                          '&:hover': { backgroundColor: '#333333', boxShadow: 'none' } 
-                        }}
-                      >
-                        Confirm & Place Order (₹{orderTotal})
-                      </Button>
-                    </Box>
-                  </Box>
-                )}
-              </DialogContent>
-            </>
+                  {/* Notice banner */}
+                  <div className="flex gap-3 items-center bg-blue-50 border border-blue-100 rounded-xl p-4">
+                    <InfoIcon className="text-blue-600 shrink-0" style={{ fontSize: 20 }} />
+                    <p className="text-xs sm:text-sm text-blue-800 font-medium leading-relaxed">
+                      Your order will be instantly placed and dispatched to the address above.
+                    </p>
+                  </div>
+
+                  {/* Action buttons */}
+                  <div className="flex gap-4 mt-2">
+                    <button 
+                      onClick={() => setCheckoutOpen(false)}
+                      className="flex-1 rounded-xl py-3.5 px-4 font-bold text-sm text-slate-900 border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 transition-all cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      onClick={handleCheckout}
+                      className="flex-[1.4] rounded-xl py-3.5 px-4 font-bold text-sm text-white bg-slate-950 hover:bg-slate-900 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                    >
+                      <span>Confirm & Place Order</span>
+                      <span className="bg-slate-800 text-white rounded-full px-3 py-0.5 text-xs font-semibold ml-1">
+                        ₹{orderTotal}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           )
         ) : (
-          <>
-            <DialogContent sx={{ pt: 3, px: 0, textAlign: 'center' }}>
-              <CheckCircleIcon sx={{ fontSize: 64, color: '#1B9A5B', mb: 2 }} />
-              <Typography variant="h5" fontWeight={850} sx={{ mb: 1.5 }}>
-                Order Completed!
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 4, px: 2 }}>
-                Thank you for your purchase. Your mock order has been placed successfully and the database cart has been reset.
-              </Typography>
-              <Button 
-                variant="contained" 
-                onClick={handleCloseCheckout}
-                fullWidth
-                sx={{ 
-                  backgroundColor: '#1A1A1A', 
-                  color: '#FFFFFF',
-                  borderRadius: '0px',
-                  py: 1.5,
-                  fontWeight: 700,
-                  boxShadow: 'none',
-                  '&:hover': { backgroundColor: '#333333', boxShadow: 'none' }
-                }}
-              >
-                Go Back to Store
-              </Button>
-            </DialogContent>
-          </>
+          /* Order completed screen */
+          <div className="bg-white rounded-3xl border border-slate-100 shadow-2xl p-8 sm:p-10 text-center font-sans">
+            <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-5">
+              <CheckCircleIcon className="text-emerald-600" style={{ fontSize: 40 }} />
+            </div>
+            
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-3">
+              Order Completed!
+            </h3>
+            
+            <p className="text-sm text-slate-500 leading-relaxed mb-8 max-w-md mx-auto">
+              Thank you for your purchase. Your mock order has been placed successfully and the database cart has been reset.
+            </p>
+            
+            <button 
+              onClick={handleCloseCheckout}
+              className="w-full bg-slate-950 hover:bg-slate-900 text-white font-bold py-4 px-6 rounded-xl transition-all cursor-pointer shadow-sm text-sm"
+            >
+              Go Back to Store
+            </button>
+          </div>
         )}
       </Dialog>
 

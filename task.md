@@ -15,10 +15,8 @@
   - [x] Add item count badge to Cart trolley icon and make it link to `/cart`
 - [x] Build Premium Cart Page
   - [x] Create `CartPage.jsx` with lists, details, quantity adjustments, checkout simulation, and empty state
-- [x] Connect "Add to Cart" Buttons
-  - [x] `ProductGrid.jsx`
-  - [x] `ProductListView.jsx`
-  - [x] `TrendingArtworks.jsx`
+- [x] Refactor paginated products layout to Tailwind CSS in `ProductGrid.jsx`
+- [/] Refactor artists showcase layout to Tailwind CSS in `ProductGrid.jsx`
   - [x] `FlashSaleDeals.jsx`
   - [x] `ProductDetailModal.jsx`
 - [x] Verification and Testing

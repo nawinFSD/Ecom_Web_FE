@@ -67,7 +67,7 @@ const ProductsPage = () => {
           
           {/* Breadcrumb Row */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 4 }}>
-            <MuiLink href="/" underline="hover" color="text.secondary" sx={{ fontSize: '0.8rem' }}>Home</MuiLink>
+            <MuiLink href="/home" underline="hover" color="text.secondary" sx={{ fontSize: '0.8rem' }}>Home</MuiLink>
             <Typography variant="caption" color="text.secondary">/</Typography>
             <MuiLink href="#" underline="hover" color="text.secondary" sx={{ fontSize: '0.8rem' }}>Categories</MuiLink>
             <Typography variant="caption" color="text.secondary">/</Typography>

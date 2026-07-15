@@ -170,7 +170,7 @@ const ProductListView = ({
   });
 
   // Page limit of 9 items
-  const pageSize = 9;
+  const pageSize = 8;
   const pageCount = Math.ceil(sortedProducts.length / pageSize) || 1;
   
   // Constrain page to bounds based on filtered length

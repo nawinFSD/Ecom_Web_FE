@@ -177,7 +177,7 @@ const ProductGrid = ({
   });
 
   // Active Pagination logic
-  const pageSize = 9;
+  const pageSize = 8;
   const pageCount = Math.ceil(sortedProducts.length / pageSize) || 1;
 
   useEffect(() => {
@@ -294,256 +294,157 @@ const ProductGrid = ({
 
       {/* Product Showcase / Cards Grid */}
       {filterParam === 'artists' ? (
-        <Box sx={{ width: '100%', mt: 2 }}>
+        <div className="w-full mt-4">
           {Object.entries(artistsMap).map(([artistName, artistProds]) => (
-            <Box key={artistName} sx={{ mb: 6, pb: 4, borderBottom: '1px solid #F0F0F0', '&:last-child': { borderBottom: 'none' } }}>
-              <Typography 
-                variant="h6" 
-                sx={{ 
-                  fontFamily: 'serif', 
-                  fontWeight: 600, 
-                  color: '#1A1A1A', 
-                  mb: 2.5, 
-                  fontSize: '1.2rem',
-                  letterSpacing: '0.02em',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 1.5,
-                  '&::after': {
-                    content: '""',
-                    flexGrow: 1,
-                    height: '1px',
-                    backgroundColor: '#E5E7EB'
-                  }
-                }}
-              >
+            <div key={artistName} className="mb-12 pb-8 border-b border-slate-100 last:border-b-0">
+              <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-3 after:content-[''] after:flex-grow after:h-[1px] after:bg-slate-200">
                 Artist: {artistName}
-              </Typography>
-              <Grid container spacing={3}>
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                 {artistProds.slice(0, 4).map((prod) => (
-                  <Grid item xs={12} sm={6} md={3} key={prod.id} sx={{ display: 'flex' }}>
-                    <Box
-                      onClick={() => handleProductClick(prod)}
-                      sx={{
-                        border: '1px solid #F0F0F0',
-                        p: 1.5,
-                        position: 'relative',
-                        height: '100%',
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        cursor: 'pointer',
-                        transition: 'all 0.25s ease',
-                        '&:hover': {
-                          boxShadow: '0 8px 32px rgba(0,0,0,0.10)',
-                          transform: 'translateY(-3px)',
-                          borderColor: '#D0D0D0',
-                        },
-                      }}
-                    >
-                      {/* Badge */}
-                      {prod.badge && (
-                        <Box sx={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
-                          <Box sx={{ backgroundColor: '#FFFFFF', px: 1, py: 0.25, borderRadius: 0.5, boxShadow: '0px 2px 4px rgba(0,0,0,0.05)' }}>
-                            <Typography sx={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.05em', color: '#666' }}>{prod.badge}</Typography>
-                          </Box>
-                        </Box>
-                      )}
+                  <div 
+                    key={prod.id}
+                    onClick={() => handleProductClick(prod)}
+                    className="bg-white border border-slate-100 rounded-2xl p-4 flex flex-col h-full cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-slate-200 group"
+                  >
+                    {/* Badge */}
+                    {prod.badge && (
+                      <div className="absolute top-3 left-3 z-10">
+                        <span className="bg-white/90 backdrop-blur-xs text-[10px] font-bold text-slate-700 px-2 py-0.5 rounded-md shadow-xs uppercase tracking-wider">
+                          {prod.badge}
+                        </span>
+                      </div>
+                    )}
 
-                      {/* Image Container */}
-                      <Box sx={{ width: '100%', height: 200, overflow: 'hidden', backgroundColor: '#F9F9F9', mb: 1.5 }}>
-                        <img 
-                          src={prod.img} 
-                          alt={prod.title} 
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                        />
-                      </Box>
+                    {/* Image Container */}
+                    <div className="w-full aspect-[4/5] relative bg-slate-50 overflow-hidden rounded-xl mb-4 shrink-0">
+                      <img 
+                        src={prod.img} 
+                        alt={prod.title} 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
 
-                      {/* Details */}
-                      <Typography variant="body1" fontWeight={750} sx={{ fontSize: '0.9rem', color: '#1A1A1A', mb: 0.5, lineHeight: 1.2 }}>
+                    {/* Details */}
+                    <div className="flex flex-col flex-grow">
+                      <h4 className="text-sm font-bold text-slate-900 line-clamp-2 leading-snug mb-1 group-hover:text-indigo-600 transition-colors">
                         {prod.title}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1.5 }}>
+                      </h4>
+                      <p className="text-xs text-slate-500 truncate mb-3">
                         {prod.medium}
-                      </Typography>
+                      </p>
                       
-                      <Box sx={{ mt: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Typography variant="body2" fontWeight={700} color="text.primary">
+                      <div className="mt-auto pt-3 border-t border-slate-50 flex justify-between items-center gap-2">
+                        <span className="text-sm font-extrabold text-slate-900">
                           ₹{prod.price}
-                        </Typography>
+                        </span>
                         {prod.oldPrice && (
-                          <Typography variant="caption" color="text.secondary" sx={{ textDecoration: 'line-through' }}>
+                          <span className="text-xs text-slate-400 line-through">
                             ₹{prod.oldPrice}
-                          </Typography>
+                          </span>
                         )}
-                      </Box>
-                    </Box>
-                  </Grid>
+                      </div>
+                    </div>
+                  </div>
                 ))}
-              </Grid>
-            </Box>
+              </div>
+            </div>
           ))}
-        </Box>
+        </div>
       ) : (
         <>
-          <Grid container spacing={3} ref={gridRef}>
+          <div className={viewMode === 'list' ? "flex flex-col gap-6" : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"} ref={gridRef}>
             {paginatedProducts.map((prod) => {
               const cartItem = cartItems.find((ci) => ci.productId === prod.id);
               const quantity = cartItem ? cartItem.quantity : 0;
               return (
-                <Grid item xs={12} sm={viewMode === 'list' ? 12 : 6} md={viewMode === 'list' ? 12 : 4} key={prod.id} className="grid-card-item" sx={{ display: 'flex' }}>
-                <Box
+                <div 
+                  key={prod.id}
                   onClick={() => handleProductClick(prod)}
-                  sx={{
-                    border: '1px solid #F0F0F0',
-                    p: 1.5,
-                    position: 'relative',
-                    height: '100%',
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: viewMode === 'list' ? { xs: 'column', sm: 'row' } : 'column',
-                    gap: viewMode === 'list' ? 3 : 0,
-                    cursor: 'pointer',
-                    transition: 'all 0.25s ease',
-                    '&:hover': {
-                      boxShadow: '0 8px 32px rgba(0,0,0,0.10)',
-                      transform: 'translateY(-3px)',
-                      borderColor: '#D0D0D0',
-                    },
-                  }}
+                  className={`bg-white border border-slate-100 rounded-2xl p-4 flex cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-slate-200 group ${
+                    viewMode === 'list' ? 'flex-col sm:flex-row gap-6 w-full' : 'flex-col h-full w-full'
+                  }`}
                 >
-                  {/* Badges */}
-                  {prod.badge && (
-                    <Box sx={{ position: 'absolute', top: 20, left: 20, zIndex: 10, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                      {prod.badge.split(' ').map((b) => (
-                        <Box key={b} sx={{ backgroundColor: '#FFFFFF', px: 1, py: 0.25, borderRadius: 0.5, boxShadow: '0px 2px 4px rgba(0,0,0,0.05)' }}>
-                          <Typography sx={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.05em', color: '#666' }}>{b}</Typography>
-                        </Box>
-                      ))}
-                    </Box>
-                  )}
-
                   {/* Image Container */}
-                  <Box
-                    sx={{
-                      width: viewMode === 'list' ? { xs: '100%', sm: 260 } : '100%',
-                      height: 260,
-                      overflow: 'hidden',
-                      backgroundColor: '#FAF8F6',
-                      mb: viewMode === 'list' ? 0 : 2,
-                    }}
-                  >
+                  <div className={`relative bg-slate-50 overflow-hidden rounded-xl shrink-0 ${
+                    viewMode === 'list' ? 'w-full sm:w-64 aspect-[4/5]' : 'w-full aspect-[4/5] mb-4'
+                  }`}>
+                    {/* Badges */}
+                    {prod.badge && (
+                      <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
+                        {prod.badge.split(' ').map((b) => (
+                          <span key={b} className="bg-white/90 backdrop-blur-xs text-[10px] font-bold text-slate-700 px-2 py-0.5 rounded-md shadow-xs uppercase tracking-wider">
+                            {b}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                     <img
                       src={imageMap[prod.imageKey]}
                       alt={prod.title}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                      }}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                  </Box>
+                  </div>
 
                   {/* Info Column */}
-                  <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                      {/* Rating row */}
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                        <GridStarRating rating={prod.rating} />
-                        <Typography variant="caption" color="text.secondary">
-                          ({prod.rating})
-                        </Typography>
-                      </Box>
+                  <div className="flex flex-col flex-grow">
+                    {/* Rating row */}
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <GridStarRating rating={prod.rating} />
+                      <span className="text-xs text-slate-500 font-medium">
+                        ({prod.rating})
+                      </span>
+                    </div>
 
-                      {/* Title */}
-                      <Typography
-                        variant="body1"
-                        fontWeight={700}
-                        sx={{
-                          fontSize: '1rem',
-                          color: '#1A1A1A',
-                          mb: 0.5,
-                          lineHeight: 1.3,
-                        }}
-                      >
-                        {prod.title}
-                      </Typography>
+                    {/* Title */}
+                    <h4 className="text-base font-bold text-slate-900 line-clamp-2 leading-snug mb-1 group-hover:text-indigo-600 transition-colors">
+                      {prod.title}
+                    </h4>
 
-                      {/* Medium details */}
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                        {prod.medium}
-                      </Typography>
+                    {/* Medium/Type details */}
+                    <p className="text-xs text-slate-500 truncate mb-3">
+                      {prod.medium}
+                    </p>
 
-                      {/* Description (List view only) */}
-                      {viewMode === 'list' && (
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{
-                            mb: 2,
-                            lineHeight: 1.5,
-                            display: '-webkit-box',
-                            WebkitLineClamp: 3,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                          }}
-                        >
-                          {prod.description}
-                        </Typography>
-                      )}
-                    </Box>
+                    {/* Description (List view only) */}
+                    {viewMode === 'list' && (
+                      <p className="text-sm text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                        {prod.description}
+                      </p>
+                    )}
 
-                    {/* Bottom Row price, CTA */}
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        mt: 2,
-                      }}
-                    >
-                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Typography variant="subtitle1" fontWeight={750} color="text.primary">
+                    {/* Bottom Row: Price and Add to Cart pinned to bottom */}
+                    <div className="mt-auto pt-4 border-t border-slate-100/60 flex items-center justify-between gap-4">
+                      <div className="flex flex-col">
+                        <span className="text-base font-extrabold text-slate-900">
                           ₹{prod.price}
-                        </Typography>
+                        </span>
                         {prod.oldPrice && (
-                          <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            sx={{ textDecoration: 'line-through' }}
-                          >
+                          <span className="text-xs text-slate-400 line-through">
                             ₹{prod.oldPrice}
-                          </Typography>
+                          </span>
                         )}
-                      </Box>
+                      </div>
 
-                      <Button
-                        variant="contained"
+                      <button
                         disabled={prod.outOfStock}
                         onClick={(e) => handleAddToCart(e, prod)}
-                        sx={{
-                          textTransform: 'uppercase',
-                          fontWeight: 700,
-                          fontSize: '0.7rem',
-                          letterSpacing: '0.08em',
-                          borderRadius: 0,
-                          backgroundColor: prod.outOfStock ? '#E0E0E0' : '#1A1A1A',
-                          color: prod.outOfStock ? '#9E9E9E' : '#FFFFFF',
-                          px: viewMode === 'list' ? 3 : 1.5,
-                          py: 0.75,
-                          boxShadow: 'none',
-                          '&:hover': { backgroundColor: prod.outOfStock ? '#E0E0E0' : '#333333', boxShadow: 'none' },
-                        }}
+                        className={`text-xs font-bold uppercase tracking-wider py-2.5 px-4 rounded-lg transition-all duration-200 cursor-pointer ${
+                          prod.outOfStock 
+                            ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                            : quantity > 0
+                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100'
+                              : 'bg-slate-900 text-white hover:bg-slate-800 active:scale-95'
+                        }`}
                       >
-                        {prod.outOfStock ? 'Out of Stock' : (quantity > 0 ? `Added to Cart (${quantity})` : 'Add to Cart')}
-                      </Button>
-                    </Box>
-                  </Box>
-                </Box>
-              </Grid>
-            )})}
-          </Grid>
+                        {prod.outOfStock ? 'Out of Stock' : (quantity > 0 ? `Added (${quantity})` : 'Add to Cart')}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
           {/* Pagination */}
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
