@@ -17,7 +17,7 @@ const slides = [
     label: 'EXCLUSIVE COLLECTION',
     title: 'Discover Exceptional\nArtworks',
     subtitle: 'Handpicked masterpieces from renowned artists worldwide — elevate your space with original art.',
-    cta: 'View Deals',
+    cta: 'Explore Gallery',
     overlay: 'rgba(0,0,0,0.25)',
   },
   {
@@ -26,7 +26,7 @@ const slides = [
     label: 'FLASH SALE — UP TO 40% OFF',
     title: 'Limited Time\nDeals',
     subtitle: 'Premium artworks at unbeatable prices. Every piece is a story waiting to be told.',
-    cta: 'View Deals',
+    cta: 'Explore Gallery',
     overlay: 'rgba(0,0,0,0.30)',
   },
   {
@@ -35,7 +35,7 @@ const slides = [
     label: 'FREE HOME DELIVERY',
     title: 'Enjoy Summer\nFree Delivery',
     subtitle: 'Designer art delivered to your door — browse our curated selection of contemporary works.',
-    cta: 'View Deals',
+    cta: 'Explore Gallery',
     overlay: 'rgba(0,0,0,0.20)',
   },
 ];

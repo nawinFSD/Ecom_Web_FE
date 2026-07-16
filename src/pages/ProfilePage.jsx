@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box, Container, Grid, Typography, Card, CardContent, Button, Divider, Avatar } from '@mui/material';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Box, Container, Grid, Typography, Card, CardContent, Button, Divider, Avatar, TextField, Select, MenuItem, FormControl, InputLabel, Snackbar, Alert } from '@mui/material';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import MailIcon from '@mui/icons-material/Mail';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import TranslateIcon from '@mui/icons-material/Translate';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { useUser } from '../context/UserContext';
 import HomeNavbar from '../components/common/HomeNavbar';
 import HomeFooter from '../components/common/HomeFooter';
+import authService from '../services/authService';
 
 // Product Image Assets Mapping
 import Draw1 from '../assets/product/draw1.jpg';
@@ -67,9 +71,55 @@ const imageMap = {
 };
 
 const ProfilePage = () => {
-  const { user, logout } = useUser();
+  const { user, logout, updateUser } = useUser();
   const navigate = useNavigate();
+  const location = useLocation();
   const [orders, setOrders] = useState([]);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState({
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    mobile: user?.mobile || '',
+    addressType: user?.addressType || 'Home',
+    addressLine1: user?.addressLine1 || '',
+    addressLine2: user?.addressLine2 || '',
+    area: user?.area || '',
+    city: user?.city || '',
+    stateProvince: user?.stateProvince || '',
+    pincode: user?.pincode || '',
+    country: user?.country || 'India',
+    language: user?.language || 'English'
+  });
+
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+
+  // Sync state if triggerEdit passed via route navigation
+  useEffect(() => {
+    if (location.state?.triggerEdit) {
+      setIsEditing(true);
+    }
+  }, [location.state]);
+
+  // Sync form inputs when user state updates
+  useEffect(() => {
+    if (user) {
+      setEditForm({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        mobile: user.mobile || '',
+        addressType: user.addressType || 'Home',
+        addressLine1: user.addressLine1 || '',
+        addressLine2: user.addressLine2 || '',
+        area: user.area || '',
+        city: user.city || '',
+        stateProvince: user.stateProvince || '',
+        pincode: user.pincode || '',
+        country: user.country || 'India',
+        language: user.language || 'English'
+      });
+    }
+  }, [user]);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -98,6 +148,43 @@ const ProfilePage = () => {
     navigate('/');
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (name, value) => {
+    setEditForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveProfile = async (e) => {
+    e.preventDefault();
+    if (
+      !editForm.firstName.trim() || 
+      !editForm.lastName.trim() || 
+      !editForm.mobile.trim() || 
+      !editForm.addressLine1.trim() || 
+      !editForm.city.trim() || 
+      !editForm.stateProvince.trim() || 
+      !editForm.pincode.trim()
+    ) {
+      setSnackbar({ open: true, message: 'All starred fields (*) are required.', severity: 'error' });
+      return;
+    }
+
+    try {
+      const response = await authService.updateProfile({
+        email: user.email,
+        ...editForm
+      });
+      updateUser(response.user);
+      setIsEditing(false);
+      setSnackbar({ open: true, message: 'Profile updated successfully!', severity: 'success' });
+    } catch (err) {
+      setSnackbar({ open: true, message: err.message || 'Error updating profile.', severity: 'error' });
+    }
+  };
+
   if (!user) return null;
 
   return (
@@ -114,7 +201,6 @@ const ProfilePage = () => {
         </Typography>
 
         <Grid container spacing={5}>
-          {/* Left Side: Personal Details Card */}
           <Grid item xs={12} lg={4}>
             <Card 
               elevation={0}
@@ -126,8 +212,9 @@ const ProfilePage = () => {
                 p: 4
               }}
             >
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 4 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
                 <Avatar 
+                  src={user.picture || ''}
                   sx={{ 
                     width: 72, 
                     height: 72, 
@@ -138,7 +225,7 @@ const ProfilePage = () => {
                     mb: 2 
                   }}
                 >
-                  {user.firstName ? user.firstName.charAt(0).toUpperCase() : 'U'}
+                  {!user.picture && (user.firstName ? user.firstName.charAt(0).toUpperCase() : 'U')}
                 </Avatar>
                 <Typography variant="h6" fontWeight={750} sx={{ color: '#1A1A1A' }}>
                   {user.firstName} {user.lastName}
@@ -148,72 +235,181 @@ const ProfilePage = () => {
                 </Typography>
               </Box>
 
+              <Divider sx={{ my: 2 }} />
+
+              {/* Edit/Update Section */}
+              {!isEditing ? (
+                <>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5 }}>
+                    <Typography variant="subtitle2" fontWeight={800} color="text.primary">
+                      PERSONAL DETAILS
+                    </Typography>
+                    <Button 
+                      variant="text" 
+                      startIcon={<EditIcon />} 
+                      onClick={() => setIsEditing(true)}
+                      sx={{ color: '#1A1A1A', textTransform: 'none', fontWeight: 700, p: 0 }}
+                    >
+                      Edit
+                    </Button>
+                  </Box>
+
+                  {/* Personal Info fields */}
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+                    
+                    {/* Email */}
+                    <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
+                      <MailIcon sx={{ color: '#777777', mt: 0.25 }} size="small" />
+                      <Box>
+                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600 }}>
+                          EMAIL
+                        </Typography>
+                        <Typography variant="body2" fontWeight={500} color="text.primary">
+                          {user.email}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    {/* Phone */}
+                    <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
+                      <PhoneAndroidIcon sx={{ color: '#777777', mt: 0.25 }} size="small" />
+                      <Box>
+                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600 }}>
+                          PHONE
+                        </Typography>
+                        <Typography variant="body2" fontWeight={500} color="text.primary">
+                          {user.mobile ? `+91 ${user.mobile}` : 'Not set'}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    {/* Language */}
+                    <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
+                      <TranslateIcon sx={{ color: '#777777', mt: 0.25 }} size="small" />
+                      <Box>
+                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600 }}>
+                          PREFERRED LANGUAGE
+                        </Typography>
+                        <Typography variant="body2" fontWeight={500} color="text.primary">
+                          {user.language || 'English'}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    {/* Address */}
+                    <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
+                      <LocationOnIcon sx={{ color: '#777777', mt: 0.25 }} size="small" />
+                      <Box>
+                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600 }}>
+                          SHIPPING ADDRESS ({user.addressType || 'Home'})
+                        </Typography>
+                        {user.addressLine1 ? (
+                          <Typography variant="body2" fontWeight={500} color="text.primary" sx={{ lineHeight: 1.5 }}>
+                            {user.addressLine1}
+                            {user.addressLine2 ? `, ${user.addressLine2}` : ''}
+                            {user.area ? `, ${user.area}` : ''}
+                            <br />
+                            {user.city}, {user.stateProvince} - {user.pincode}
+                            <br />
+                            <strong>{user.country || 'India'}</strong>
+                          </Typography>
+                        ) : (
+                          <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                            Address not configured
+                          </Typography>
+                        )}
+                      </Box>
+                    </Box>
+
+                  </Box>
+                </>
+              ) : (
+                /* Edit Profile Form */
+                <Box component="form" onSubmit={handleSaveProfile} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Typography variant="subtitle2" fontWeight={800} color="text.primary" sx={{ mb: 1 }}>
+                    EDIT PROFILE DETAILS
+                  </Typography>
+
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <TextField label="First Name *" name="firstName" value={editForm.firstName} onChange={handleInputChange} fullWidth size="small" />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <TextField label="Last Name *" name="lastName" value={editForm.lastName} onChange={handleInputChange} fullWidth size="small" />
+                    </Grid>
+                  </Grid>
+
+                  <TextField label="Phone Number * (+91)" name="mobile" value={editForm.mobile} onChange={handleInputChange} fullWidth size="small" />
+
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Address Type</InputLabel>
+                    <Select value={editForm.addressType} label="Address Type" onChange={(e) => handleSelectChange('addressType', e.target.value)}>
+                      <MenuItem value="Home">Home</MenuItem>
+                      <MenuItem value="Work">Work</MenuItem>
+                      <MenuItem value="Other">Other</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  <TextField label="Address Line 1 *" name="addressLine1" value={editForm.addressLine1} onChange={handleInputChange} fullWidth size="small" />
+                  <TextField label="Address Line 2" name="addressLine2" value={editForm.addressLine2} onChange={handleInputChange} fullWidth size="small" />
+
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <TextField label="Area" name="area" value={editForm.area} onChange={handleInputChange} fullWidth size="small" />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <TextField label="City *" name="city" value={editForm.city} onChange={handleInputChange} fullWidth size="small" />
+                    </Grid>
+                  </Grid>
+
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <TextField label="State / Province *" name="stateProvince" value={editForm.stateProvince} onChange={handleInputChange} fullWidth size="small" />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <TextField label="Pincode *" name="pincode" value={editForm.pincode} onChange={handleInputChange} fullWidth size="small" />
+                    </Grid>
+                  </Grid>
+
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <TextField label="Country" name="country" value={editForm.country} onChange={handleInputChange} fullWidth size="small" />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <FormControl fullWidth size="small">
+                        <InputLabel>Language</InputLabel>
+                        <Select value={editForm.language} label="Language" onChange={(e) => handleSelectChange('language', e.target.value)}>
+                          <MenuItem value="English">English</MenuItem>
+                          <MenuItem value="Hindi">Hindi</MenuItem>
+                          <MenuItem value="Tamil">Tamil</MenuItem>
+                          <MenuItem value="Spanish">Spanish</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+
+                  <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+                    <Button 
+                      variant="outlined" 
+                      onClick={() => setIsEditing(false)}
+                      fullWidth
+                      sx={{ borderRadius: '8px', color: '#757575', borderColor: '#BDBDBD', textTransform: 'none', fontWeight: 700 }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      type="submit"
+                      variant="contained" 
+                      fullWidth
+                      sx={{ borderRadius: '8px', backgroundColor: '#1A1A1A', color: '#FFFFFF', textTransform: 'none', fontWeight: 700, '&:hover': { backgroundColor: '#333' } }}
+                    >
+                      Save
+                    </Button>
+                  </Box>
+                </Box>
+              )}
+
               <Divider sx={{ my: 3 }} />
-
-              {/* Personal Info fields */}
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-                
-                {/* Email */}
-                <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
-                  <MailIcon sx={{ color: '#777777', mt: 0.25 }} size="small" />
-                  <Box>
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600 }}>
-                      EMAIL
-                    </Typography>
-                    <Typography variant="body2" fontWeight={500} color="text.primary">
-                      {user.email}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {/* Phone */}
-                <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
-                  <PhoneAndroidIcon sx={{ color: '#777777', mt: 0.25 }} size="small" />
-                  <Box>
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600 }}>
-                      PHONE
-                    </Typography>
-                    <Typography variant="body2" fontWeight={500} color="text.primary">
-                      +91 {user.mobile}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {/* Language */}
-                <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
-                  <TranslateIcon sx={{ color: '#777777', mt: 0.25 }} size="small" />
-                  <Box>
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600 }}>
-                      PREFERRED LANGUAGE
-                    </Typography>
-                    <Typography variant="body2" fontWeight={500} color="text.primary">
-                      {user.language || 'English'}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {/* Address */}
-                <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
-                  <LocationOnIcon sx={{ color: '#777777', mt: 0.25 }} size="small" />
-                  <Box>
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600 }}>
-                      SHIPPING ADDRESS ({user.addressType || 'Home'})
-                    </Typography>
-                    <Typography variant="body2" fontWeight={500} color="text.primary" sx={{ lineHeight: 1.5 }}>
-                      {user.addressLine1}
-                      {user.addressLine2 ? `, ${user.addressLine2}` : ''}
-                      {user.area ? `, ${user.area}` : ''}
-                      <br />
-                      {user.city}, {user.stateProvince} - {user.pincode}
-                      <br />
-                      <strong>{user.country || 'India'}</strong>
-                    </Typography>
-                  </Box>
-                </Box>
-
-              </Box>
-
-              <Divider sx={{ my: 4 }} />
 
               <Button 
                 variant="outlined" 
@@ -402,6 +598,12 @@ const ProfilePage = () => {
       </Container>
 
       <HomeFooter />
+
+      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}>
+        <Alert severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

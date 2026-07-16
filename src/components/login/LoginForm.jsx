@@ -12,36 +12,24 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState('');
-  const { login, register } = useUser();
+  const { login, register, googleLogin } = useUser();
   const navigate = useNavigate();
 
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const [resetSuccess, setResetSuccess] = useState(false);
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = async (credential) => {
+    if (!credential) {
+      setErrorText('Google sign in did not return valid credentials.');
+      return;
+    }
     setErrorText('');
-    const res = await login('google_user@gmail.com', 'GoogleUserPassword123');
+    const res = await googleLogin(credential);
     if (res.success) {
       navigate('/home');
     } else {
-      const registerRes = await register({
-        firstName: 'Google',
-        lastName: 'User',
-        email: 'google_user@gmail.com',
-        mobile: '9999999999',
-        password: 'GoogleUserPassword123',
-        addressType: 'Home',
-        pincode: '400001',
-        addressLine1: 'Google Campus',
-        city: 'Delhi',
-        stateProvince: 'Delhi'
-      });
-      if (registerRes.success) {
-        navigate('/home');
-      } else {
-        setErrorText(registerRes.message || 'Google mock login failed');
-      }
+      setErrorText(res.message || 'Google sign in failed');
     }
   };
 

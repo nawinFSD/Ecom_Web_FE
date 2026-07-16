@@ -55,14 +55,39 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const googleLogin = async (credential) => {
+    try {
+      const response = await authService.googleAuth(credential);
+      if (response && response.user) {
+        setUser(response.user);
+        localStorage.setItem('ecom_user', JSON.stringify(response.user));
+        if (response.token) {
+          localStorage.setItem('ecom_token', response.token);
+        }
+        return { success: true, user: response.user };
+      }
+      return { success: false, message: response.message || 'Google Login failed' };
+    } catch (error) {
+      return { 
+        success: false, 
+        message: error.response?.data?.message || error.message || 'Connection error' 
+      };
+    }
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('ecom_user');
-    // Clear cart or redirect is handled at route levels
+    localStorage.removeItem('ecom_token');
+  };
+
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+    localStorage.setItem('ecom_user', JSON.stringify(updatedUser));
   };
 
   return (
-    <UserContext.Provider value={{ user, authLoading, login, register, logout }}>
+    <UserContext.Provider value={{ user, authLoading, login, register, googleLogin, logout, updateUser }}>
       {children}
     </UserContext.Provider>
   );

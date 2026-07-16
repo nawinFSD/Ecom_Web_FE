@@ -1,40 +1,24 @@
-import { Box, Button, Typography, Divider } from '@mui/material';
-import GoogleIcon from '../../assets/home/G-icon.png';
+import { Box, Typography, Divider } from '@mui/material';
+import { GoogleLogin } from '@react-oauth/google';
 
 const SocialSignOn = ({ onGoogleClick }) => {
-  const buttonStyle = {
-    justifyContent: 'center',
-    textTransform: 'none',
-    borderColor: 'divider',
-    fontWeight: 650,
-    color: 'text.secondary',
-    px: { xs: 1.5, sm: 2, md: 2.5 },
-    py: { xs: 1.25, sm: 1.5 },
-    fontSize: { xs: '0.9rem', sm: '1rem' },
-    borderRadius: '4px',
-    boxShadow: 'none',
-    '&:hover': { borderColor: 'text.secondary', backgroundColor: '#F9FAFB' },
-  };
-
-  const iconStyle = {
-    width: { xs: 20, sm: 24 },
-    height: { xs: 20, sm: 24 },
-    marginRight: '8px',
-  };
-
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.25, sm: 1.5 }, width: '100%', mb: { xs: 2.5, sm: 3, md: 4 } }}>
-      {/* Google Button with Asset Icon */}
-      <Button
-        variant="outlined"
-        color="inherit"
-        fullWidth
-        onClick={onGoogleClick}
-        sx={buttonStyle}
-        startIcon={<img src={GoogleIcon} alt="Google" style={iconStyle} />}
-      >
-        Continue with Google
-      </Button>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.25, sm: 1.5 }, width: '100%', mb: { xs: 2.5, sm: 3, md: 4 }, alignItems: 'center' }}>
+      
+      {/* Official Google Login Button */}
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            if (credentialResponse.credential) {
+              onGoogleClick(credentialResponse.credential);
+            }
+          }}
+          onError={() => {
+            console.error('Google Sign In failed');
+          }}
+          useOneTap
+        />
+      </Box>
 
       {/* "or" Divider with responsive margins */}
       <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mt: { xs: 0.5, sm: 1 } }}>

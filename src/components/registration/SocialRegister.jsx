@@ -1,31 +1,24 @@
-import { Box, Button, Typography, Divider } from '@mui/material';
-import GoogleIcon from '../../assets/home/G-icon.png';
+import { Box, Typography, Divider } from '@mui/material';
+import { GoogleLogin } from '@react-oauth/google';
 
 const SocialRegister = ({ onGoogleClick }) => {
-  const buttonStyle = {
-    width: '100%',
-    justifyContent: 'center',
-    textTransform: 'none',
-    borderColor: '#E0E0E0',
-    fontWeight: 650,
-    color: 'text.primary',
-    py: 1.4,
-    fontSize: '0.875rem',
-    backgroundColor: '#FFFFFF',
-    borderRadius: '4px',
-    boxShadow: 'none',
-    '&:hover': { borderColor: '#BDBDBD', backgroundColor: '#F9FAFB' },
-  };
-
-  const iconStyle = { width: 20, height: 20, marginRight: '8px' };
-
   return (
-    <Box sx={{ width: '100%', mb: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button variant="outlined" onClick={onGoogleClick} sx={buttonStyle}>
-          <img src={GoogleIcon} alt="Google" style={iconStyle} />
-          Sign up with Google
-        </Button>
+    <Box sx={{ width: '100%', mb: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      
+      {/* Official Google Signup Button */}
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            if (credentialResponse.credential) {
+              onGoogleClick(credentialResponse.credential);
+            }
+          }}
+          onError={() => {
+            console.error('Google Sign Up failed');
+          }}
+          text="signup_with"
+          useOneTap
+        />
       </Box>
 
       {/* "or" Divider */}

@@ -184,6 +184,37 @@ const CartPage = () => {
     setCheckoutLoading(true);
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Save order history to LocalStorage
+    if (user && user.email) {
+      const orderKey = `ecom_orders_${user.email}`;
+      const savedOrders = localStorage.getItem(orderKey);
+      let currentOrders = [];
+      if (savedOrders) {
+        try {
+          currentOrders = JSON.parse(savedOrders);
+        } catch (e) {
+          console.error('Failed to parse existing orders', e);
+        }
+      }
+      
+      const newOrder = {
+        orderId: Math.floor(100000 + Math.random() * 900000).toString(),
+        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        total: orderTotal,
+        items: cartItems.map(item => ({
+          imageKey: item.imageKey,
+          title: item.title,
+          artist: item.artist,
+          price: item.price,
+          quantity: item.quantity
+        }))
+      };
+      
+      currentOrders.unshift(newOrder); // Add to the top of order history
+      localStorage.setItem(orderKey, JSON.stringify(currentOrders));
+    }
+
     setCheckoutLoading(false);
     setOrderComplete(true);
     triggerConfetti();
@@ -194,7 +225,7 @@ const CartPage = () => {
   const handleCloseCheckout = () => {
     setOrderComplete(false);
     setCheckoutOpen(false);
-    navigate('/home');
+    navigate('/profile');
   };
 
   // Calculations
@@ -591,11 +622,27 @@ const CartPage = () => {
                 </button>
               </div>
 
-              <p className="text-sm text-slate-500 mb-6">
-                Please verify your delivery details before placing your order.
-              </p>
-
-              {checkoutLoading ? (
+              {(!user.mobile || !user.addressLine1 || !user.city || !user.stateProvince || !user.pincode) ? (
+                /* Incomplete Profile Blocker */
+                <div className="py-8 flex flex-col items-center gap-4 text-center">
+                  <div className="w-14 h-14 bg-amber-50 rounded-full flex items-center justify-center text-amber-600">
+                    <InfoIcon style={{ fontSize: 32 }} />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900">Incomplete Delivery Profile</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed max-w-sm">
+                    Your shipping address or phone number is missing. Please complete your profile details before placing an order.
+                  </p>
+                  <button 
+                    onClick={() => {
+                      setCheckoutOpen(false);
+                      navigate('/profile', { state: { triggerEdit: true } });
+                    }}
+                    className="mt-2 w-full sm:w-auto bg-slate-950 hover:bg-slate-900 text-white font-bold py-3 px-6 rounded-xl transition-all cursor-pointer shadow-sm text-sm"
+                  >
+                    Go to My Profile
+                  </button>
+                </div>
+              ) : checkoutLoading ? (
                 <div className="py-12 text-center flex flex-col items-center justify-center gap-4">
                   <div className="w-10 h-10 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin"></div>
                   <p className="text-sm text-slate-500 font-medium">
@@ -706,7 +753,7 @@ const CartPage = () => {
               onClick={handleCloseCheckout}
               className="w-full bg-slate-950 hover:bg-slate-900 text-white font-bold py-4 px-6 rounded-xl transition-all cursor-pointer shadow-sm text-sm"
             >
-              Go Back to Store
+              View My Orders
             </button>
           </div>
         )}

@@ -58,15 +58,15 @@ const BrandLogo = ({ textColor = 'text.primary', size = 'medium', withText = tru
         ease: 'back.out(2)',
         delay: i * 0.04,
       })
-      .to(el, {
-        scaleY: 1,
-        scaleX: 1,
-        skewX: 0,
-        rotation: 0,
-        y: 0,
-        duration: 0.5,
-        ease: 'elastic.out(1.2, 0.4)',
-      });
+        .to(el, {
+          scaleY: 1,
+          scaleX: 1,
+          skewX: 0,
+          rotation: 0,
+          y: 0,
+          duration: 0.5,
+          ease: 'elastic.out(1.2, 0.4)',
+        });
     });
   }, []);
 

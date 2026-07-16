@@ -124,54 +124,11 @@ const DirectionalUnderlineLink = ({ children, component, to, href, ...props }) =
 
 // ─── Directional Underline Title Component ───
 const DirectionalUnderlineTitle = ({ children }) => {
-  const underlineRef = useRef(null);
-
-  const handleMouseEnter = useCallback((e) => {
-    const el = e.currentTarget;
-    const underline = underlineRef.current;
-    if (!underline) return;
-
-    const rect = el.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const fromLeft = e.clientX < centerX;
-
-    gsap.killTweensOf(underline);
-    gsap.set(underline, {
-      transformOrigin: fromLeft ? '0% 50%' : '100% 50%',
-      scaleX: 0,
-    });
-    gsap.to(underline, {
-      scaleX: 1,
-      duration: 0.35,
-      ease: 'power3.out',
-    });
-  }, []);
-
-  const handleMouseLeave = useCallback((e) => {
-    const el = e.currentTarget;
-    const underline = underlineRef.current;
-    if (!underline) return;
-
-    const rect = el.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const exitLeft = e.clientX < centerX;
-
-    gsap.killTweensOf(underline);
-    gsap.to(underline, {
-      scaleX: 0,
-      transformOrigin: exitLeft ? '0% 50%' : '100% 50%',
-      duration: 0.3,
-      ease: 'power3.in',
-    });
-  }, []);
-
   return (
     <Typography
       variant="body2"
       fontWeight={600}
       color="text.primary"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       sx={{
         mb: 2.5,
         letterSpacing: '0.10em',
@@ -182,21 +139,6 @@ const DirectionalUnderlineTitle = ({ children }) => {
       }}
     >
       {children}
-      <Box
-        ref={underlineRef}
-        component="span"
-        sx={{
-          position: 'absolute',
-          bottom: -3,
-          left: 0,
-          width: '100%',
-          height: '2px',
-          backgroundColor: '#1A1A1A',
-          transformOrigin: '0% 50%',
-          transform: 'scaleX(0)',
-          willChange: 'transform',
-        }}
-      />
     </Typography>
   );
 };

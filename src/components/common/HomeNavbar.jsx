@@ -1,10 +1,11 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Box, Container, Link, useTheme, useMediaQuery, TextField, Badge } from '@mui/material';
+import { Box, Container, Link, useTheme, useMediaQuery, TextField, Badge, Typography } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import BrandLogo from './BrandLogo';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
+import { useUser } from '../../context/UserContext';
 import { gsap } from 'gsap';
 
 // Asset Imports
@@ -29,6 +30,7 @@ const HomeNavbar = () => {
   const [searchVal, setSearchVal] = useState(searchParams.get('search') || '');
   const { totalQuantity } = useCart();
   const { wishlistItems } = useWishlist();
+  const { user } = useUser();
 
   // Refs for icon hover animations
   const searchIconRef = useRef(null);
@@ -49,75 +51,21 @@ const HomeNavbar = () => {
   };
 
   // ─── GSAP Icon Hover Handlers ───
-  const handleIconEnter = useCallback((ref, variant = 'default') => {
+  const handleIconEnter = useCallback((ref) => {
     if (!ref.current) return;
-    const tl = gsap.timeline();
-    if (variant === 'cart') {
-      // Cart gets a playful bounce sequence
-      tl.to(ref.current, {
-        scale: 1.3,
-        rotation: -12,
-        y: -4,
-        duration: 0.25,
-        ease: 'back.out(3)',
-      })
-      .to(ref.current, {
-        rotation: 12,
-        duration: 0.15,
-        ease: 'power2.inOut',
-      })
-      .to(ref.current, {
-        rotation: 0,
-        duration: 0.2,
-        ease: 'elastic.out(1, 0.4)',
-      });
-    } else if (variant === 'search') {
-      // Search gets a pulse ring + scale
-      tl.to(ref.current, {
-        scale: 1.25,
-        rotation: 15,
-        y: -3,
-        duration: 0.3,
-        ease: 'elastic.out(1, 0.5)',
-      });
-    } else if (variant === 'wishlist') {
-      // Wishlist heart gets a heartbeat pulse
-      tl.to(ref.current, {
-        scale: 1.3,
-        y: -3,
-        duration: 0.15,
-        ease: 'power2.out',
-      })
-      .to(ref.current, {
-        scale: 1.1,
-        duration: 0.1,
-        ease: 'power2.in',
-      })
-      .to(ref.current, {
-        scale: 1.35,
-        duration: 0.15,
-        ease: 'power2.out',
-      });
-    } else {
-      // Default: person icon
-      tl.to(ref.current, {
-        scale: 1.3,
-        rotation: -15,
-        y: -3,
-        duration: 0.3,
-        ease: 'elastic.out(1, 0.5)',
-      });
-    }
+    gsap.to(ref.current, {
+      scale: 1.25,
+      duration: 0.25,
+      ease: 'power2.out',
+    });
   }, []);
 
   const handleIconLeave = useCallback((ref) => {
     if (!ref.current) return;
     gsap.to(ref.current, {
       scale: 1,
-      rotation: 0,
-      y: 0,
-      duration: 0.4,
-      ease: 'elastic.out(1, 0.3)',
+      duration: 0.25,
+      ease: 'power2.out',
     });
   }, []);
 
@@ -342,7 +290,7 @@ const HomeNavbar = () => {
             <Box
               ref={searchIconRef}
               onClick={() => setShowSearch(!showSearch)}
-              onMouseEnter={() => handleIconEnter(searchIconRef, 'search')}
+              onMouseEnter={() => handleIconEnter(searchIconRef)}
               onMouseLeave={() => handleIconLeave(searchIconRef)}
               sx={{ display: 'inline-flex', cursor: 'pointer', p: 0.5, borderRadius: '50%' }}
             >
@@ -370,7 +318,7 @@ const HomeNavbar = () => {
             >
               <Box
                 ref={wishlistIconRef}
-                onMouseEnter={() => handleIconEnter(wishlistIconRef, 'wishlist')}
+                onMouseEnter={() => handleIconEnter(wishlistIconRef)}
                 onMouseLeave={() => handleIconLeave(wishlistIconRef)}
                 sx={{ display: 'inline-flex' }}
               >
@@ -403,7 +351,7 @@ const HomeNavbar = () => {
               <Box
                 ref={cartIconRef}
                 onClick={() => navigate('/cart')}
-                onMouseEnter={() => handleIconEnter(cartIconRef, 'cart')}
+                onMouseEnter={() => handleIconEnter(cartIconRef)}
                 onMouseLeave={() => handleIconLeave(cartIconRef)}
                 sx={{ display: 'inline-flex', cursor: 'pointer', p: 0.5, borderRadius: '50%' }}
               >
@@ -419,15 +367,28 @@ const HomeNavbar = () => {
             <Box
               ref={personIconRef}
               onClick={handleProfileClick}
-              onMouseEnter={() => handleIconEnter(personIconRef, 'default')}
+              onMouseEnter={() => handleIconEnter(personIconRef)}
               onMouseLeave={() => handleIconLeave(personIconRef)}
-              sx={{ display: 'inline-flex', cursor: 'pointer', p: 0.5, borderRadius: '50%' }}
+              sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer', p: 0.5, borderRadius: '24px' }}
             >
-              <img
-                src={PersonIconImg}
-                alt="Profile"
-                style={{ ...iconStyle, pointerEvents: 'none' }}
-              />
+              {user && user.picture ? (
+                <img
+                  src={user.picture}
+                  alt="Profile"
+                  style={{ width: 24, height: 24, borderRadius: '50%', objectFit: 'cover' }}
+                />
+              ) : (
+                <img
+                  src={PersonIconImg}
+                  alt="Profile"
+                  style={{ ...iconStyle, pointerEvents: 'none' }}
+                />
+              )}
+              {user && (
+                <Typography variant="body2" fontWeight={600} color="text.primary" sx={{ display: { xs: 'none', md: 'inline' } }}>
+                  Hi, {user.firstName}
+                </Typography>
+              )}
             </Box>
           </Box>
         </Box>

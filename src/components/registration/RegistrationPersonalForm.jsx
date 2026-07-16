@@ -86,15 +86,32 @@ const RegistrationPersonalForm = () => {
     navigate('/Login2');
   };
 
-  const handleGoogleSignup = () => {
-    sessionStorage.setItem('reg_personal', JSON.stringify({
-      firstName: 'Google',
-      lastName: 'User',
-      email: 'google_user@gmail.com',
-      mobile: '9999999999',
-      password: 'GoogleUserPassword123'
-    }));
-    navigate('/Login2');
+  const handleGoogleSignupSuccess = (credential) => {
+    if (!credential) {
+      alert("Google Sign Up failed. No credentials returned.");
+      return;
+    }
+    
+    try {
+      const profile = JSON.parse(atob(credential.split('.')[1]));
+      sessionStorage.setItem('reg_personal', JSON.stringify({
+        firstName: profile.given_name || 'Google',
+        lastName: profile.family_name || 'User',
+        email: profile.email,
+        googleId: profile.sub,
+        picture: profile.picture || '',
+        mobile: '',
+        password: ''
+      }));
+      navigate('/Login2');
+    } catch (e) {
+      console.error("Error decoding Google ID token:", e);
+      alert("Failed to decode Google account details.");
+    }
+  };
+
+  const handleGoogleSignup = (credential) => {
+    handleGoogleSignupSuccess(credential);
   };
 //   const theme = useTheme();
 //   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));

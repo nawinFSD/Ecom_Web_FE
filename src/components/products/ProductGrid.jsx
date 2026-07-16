@@ -8,8 +8,9 @@ import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
 import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
 
-// Load product data from JSON (single source of truth)
+// Load product data from JSON (fallback)
 import productsJson from '../../data/products.json';
+import productService from '../../services/productService';
 
 // Product Detail Modal
 import ProductDetailModal from './ProductDetailModal';
@@ -93,6 +94,7 @@ const ProductGrid = ({
   onToggleFilters = () => {}
 }) => {
   const { cartItems, addToCart } = useCart();
+  const [productsList, setProductsList] = useState(productsJson);
   
   const handleAddToCart = (e, prod) => {
     e.stopPropagation();
@@ -109,8 +111,31 @@ const ProductGrid = ({
   const searchQuery = searchParams.get('search') || '';
   const filterParam = searchParams.get('filter') || '';
 
+  useEffect(() => {
+    let active = true;
+    const fetchProds = async () => {
+      try {
+        const data = await productService.getAllProducts();
+        if (active) {
+          setProductsList(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch live products catalog', err);
+      }
+    };
+    fetchProds();
+    return () => { active = false; };
+  }, []);
+
+  const getProductImage = (imageKey) => {
+    if (imageKey && (imageKey.startsWith('http') || imageKey.startsWith('/'))) {
+      return imageKey;
+    }
+    return imageMap[imageKey] || imageMap['paint1'];
+  };
+
   const handleProductClick = (prod) => {
-    setSelectedProduct({ ...prod, img: imageMap[prod.imageKey] });
+    setSelectedProduct({ ...prod, img: getProductImage(prod.imageKey) });
   };
 
   const handleCloseModal = () => {
@@ -121,15 +146,15 @@ const ProductGrid = ({
 
   // Group by artist (for the artists showcase view)
   const artistsMap = {};
-  productsJson.forEach(p => {
+  productsList.forEach(p => {
     if (!artistsMap[p.artist]) {
       artistsMap[p.artist] = [];
     }
-    artistsMap[p.artist].push({ ...p, img: imageMap[p.imageKey] });
+    artistsMap[p.artist].push({ ...p, img: getProductImage(p.imageKey) });
   });
 
   // Dynamic Filtering based on the filters prop, search query, and URL filterParam
-  const filteredProducts = productsJson.filter(prod => {
+  const filteredProducts = productsList.filter(prod => {
     // URL Category Filter Param match
     if (filterParam === 'paint' && !prod.imageKey.startsWith('paint')) return false;
     if (filterParam === 'draw' && !prod.imageKey.startsWith('draw')) return false;
@@ -380,7 +405,7 @@ const ProductGrid = ({
                       </div>
                     )}
                     <img
-                      src={imageMap[prod.imageKey]}
+                      src={getProductImage(prod.imageKey)}
                       alt={prod.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
