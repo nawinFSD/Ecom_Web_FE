@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://localhost:5000/api/cart';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = `${BASE_URL.replace(/\/$/, '')}/api/cart`;
 
 export const cartService = {
   // GET all cart items

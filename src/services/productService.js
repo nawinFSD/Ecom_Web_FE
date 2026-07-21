@@ -1,6 +1,7 @@
 import productsJson from '../data/products.json';
 
-const API_BASE_URL = 'http://localhost:5000/api/products';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = `${BASE_URL.replace(/\/$/, '')}/api/products`;
 
 const productService = {
   // Fetch all products
